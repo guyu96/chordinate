@@ -1,4 +1,4 @@
-# chordinate
+# chordinate™
 
 ## Project Goal
 
@@ -12,8 +12,11 @@ Become a better person today. Use chordinate™.
 
 ## User Stories
 
-1. As a jazz pianist, I want to choose progressions from jazz standards so that I can start improvising.
+1. As a jazz pianist, I want to choose progressions from jazz standards so that I can start improvising
 
-2. As a guitar player, I want to practice my chord switching skills at the pace of my choice.
+2. As a guitar player, I want to practice my chord switching skills at the pace of my choice
 
-3. As a chord, I want to be featured in a cool React Native app like chordinate™.
+3. As a chord, I want to be featured in a cool React Native app like chordinate™
+
+## Contributors
+Guyu (gf940), Shantanu (sb5455), Xin (xt405)
