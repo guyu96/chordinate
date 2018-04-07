@@ -38,8 +38,7 @@ class ChordPicker extends Component {
 
 const styles = StyleSheet.create({
   pickerStyle: {
-    height: 50,
-    width: 120
+    width: 110
   },
 });
 
