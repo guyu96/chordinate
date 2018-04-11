@@ -4,7 +4,7 @@ import Svg, { Circle, Rect } from 'react-native-svg';
 
 const styles = {
   height: 100,
-  width: 245,
+  width: 259,
   whiteKeyHeight: 100,
   whiteKeyWidth: 36,
   blackKeyHeight: 50,
