@@ -21,7 +21,6 @@ export default class ChordSelectionView extends Component {
 
 const styles = StyleSheet.create({
   chordSelectionViewStyle: {
-    borderWidth: 5,
     width: "50%",
     height: "80%",
     alignItems: 'center',

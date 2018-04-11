@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import ChordPicker from '../ChordPicker/ChordPicker';
+import { noteNames, qualityNames } from '../../chord';
 
 export default class PickerView extends Component {
   state = {
     chordSelected: 0,
-    chordNames: ["C", "A", "D", "E"],
     qualitySelected: 0,
-    qualityNames: ["major", "minor"],
   };
 
   chordSelectHandler = (index) => {
@@ -28,12 +27,12 @@ export default class PickerView extends Component {
       <View style={styles.container}>
         <ChordPicker
           selectedIndex={this.state.chordSelected}
-          selectionList={this.state.chordNames}
+          selectionList={noteNames}
           onItemSelected={this.chordSelectHandler}
         />
         <ChordPicker
           selectedIndex={this.state.qualitySelected}
-          selectionList={this.state.qualityNames}
+          selectionList={qualityNames}
           onItemSelected={this.qualitySelectHandler}
         />
       </View>

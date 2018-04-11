@@ -27,8 +27,8 @@ const QUALITIES = {
   'dim7' : [3, 6, 9]
 };
 
-export const noteNames = NOTES.keys();
-export const qualityNames = QUALITIES.keys();
+export const noteNames = Object.keys(NOTES);
+export const qualityNames = Object.keys(QUALITIES);
 
 export const getChordNotes = (rootName, qualityName) => {
   chordNotes = [NOTES[rootName]];
