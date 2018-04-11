@@ -5,7 +5,7 @@ import { View, Picker, StyleSheet } from 'react-native';
 class ChordPicker extends Component {
   state = {
     selectedItem: this.props.selectionList[this.props.selectedIndex]
-  }
+  };
 
   itemSelectionHandler = (index) => {
     this.setState({
