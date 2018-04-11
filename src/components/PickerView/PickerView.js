@@ -6,27 +6,36 @@ import { noteNames, qualityNames } from '../../chord';
 
 export default class PickerView extends Component {
   state = {
-    chordSelected: 0,
+    rootSelected: 0,
     qualitySelected: 0,
   };
 
+  chordChangeHelper = () => {
+    this.props.chordChangeHandler(
+      noteNames[this.state.rootSelected],
+      qualityNames[this.state.qualitySelected]
+    );
+  }
+
   chordSelectHandler = (index) => {
-    this.setState({
-      chordSelected: index,
-    });
+    this.setState(
+      { rootSelected: index },
+      () => { this.chordChangeHelper() }
+    );
   };
 
   qualitySelectHandler = (index) => {
-    this.setState({
-      chordSelected: index,
-    });
+    this.setState(
+      { rootSelected: index },
+      () => { this.chordChangeHelper() }
+    );
   };
 
   render() {
     return (
       <View style={styles.container}>
         <ChordPicker
-          selectedIndex={this.state.chordSelected}
+          selectedIndex={this.state.rootSelected}
           selectionList={noteNames}
           onItemSelected={this.chordSelectHandler}
         />
