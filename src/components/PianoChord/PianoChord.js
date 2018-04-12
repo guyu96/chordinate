@@ -54,7 +54,7 @@ export default class PianoChord extends Component {
     };
   }
 
-  renderWhiteKey(x, y) {
+  renderWhiteKey(x, y, key) {
     const attr = {
       x : x.toString(),
       y : y.toString(),
@@ -62,14 +62,15 @@ export default class PianoChord extends Component {
       height: styles.whiteKeyHeight.toString(),
       stroke: styles.borderColor,
       strokeWidth: styles.borderSize.toString(),
-      fill: styles.whiteKeyColor
+      fill: styles.whiteKeyColor,
+      key: key
     };
     return (
       <Rect {...attr}/>
     );
   }
 
-  renderBlackKey(x, y) {
+  renderBlackKey(x, y, key) {
     const attr = {
       x : x.toString(),
       y : y.toString(),
@@ -77,21 +78,23 @@ export default class PianoChord extends Component {
       height: styles.blackKeyHeight.toString(),
       stroke: styles.borderColor,
       strokeWidth: styles.borderSize.toString(),
-      fill: styles.blackKeyColor
+      fill: styles.blackKeyColor,
+      key: key
     };
     return (
       <Rect {...attr}/>
     );
   }
 
-  renderIndicator(x, y) {
+  renderIndicator(x, y, key) {
     const attr = {
       cx: x.toString(),
       cy: y.toString(),
       r: styles.indicatorRadius.toString(),
       stroke: styles.borderColor,
       strokeWidth: styles.borderSize.toString(),
-      fill: styles.indicatorColor
+      fill: styles.indicatorColor,
+      key: key
     };
     return (
       <Circle {...attr}/>
@@ -101,15 +104,15 @@ export default class PianoChord extends Component {
   render() {
     const whiteKeys = whiteKeyNotes.map((note, index) => {
       const { x, y } = this.noteToXY(note);
-      return this.renderWhiteKey(x, y);
+      return this.renderWhiteKey(x, y, `white-key-${index}`);
     });
     const blackKeys = blackKeyNotes.map((note, index) => {
       const { x, y } = this.noteToXY(note);
-      return this.renderBlackKey(x, y);
+      return this.renderBlackKey(x, y, `black-key-${index}`);
     });
     const indicators = this.props.chordNotes.map((note, index) => {
       const { x, y } = this.indicatorToXY(note);
-      return this.renderIndicator(x, y);
+      return this.renderIndicator(x, y, `indicator-${index}`);
     });
     const attr = {
       height: styles.height.toString(),
