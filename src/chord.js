@@ -1,20 +1,20 @@
 const NOTES = {
   'C': 0,
-  'C#' : 1, 'Db' : 1,
+  'C# / Db' : 1,
   'D' : 2,
-  'D#' : 3, 'Eb' : 3,
+  'D# / Eb' : 3,
   'E' : 4,
   'F' : 5,
-  'F#' : 6, 'Gb' : 6,
+  'F# / Gb' : 6,
   'G' : 7,
-  'G#' : 8, 'Ab' : 8,
+  'G# / Ab' : 8,
   'A' : 9,
-  'A#' : 10, 'Bb' : 10,
+  'A# / Bb' : 10,
   'B' : 11
 };
 
 const QUALITIES = {
-  '' : [4, 7],
+  'maj' : [4, 7],
   'm' : [3, 7],
   'aug' : [4, 8],
   'dim' : [3, 6],
@@ -27,13 +27,14 @@ const QUALITIES = {
   'dim7' : [3, 6, 9]
 };
 
-export const noteNames = Object.keys(NOTES);
-export const qualityNames = Object.keys(QUALITIES);
+// use an array to enforce order
+export const noteNames = ['C', 'C# / Db', 'D', 'D# / Eb', 'E', 'F', 'F# / Gb', 'G', 'G# / Ab', 'A', 'A# / Bb', 'B'];
+export const qualityNames = ['maj', 'm', 'aug', 'dim', '7', 'maj7', 'm7', 'mM7', 'm7b5', 'aug7', 'dim7'];
 
 export const getChordNotes = (rootName, qualityName) => {
   chordNotes = [NOTES[rootName]];
   for (let increment of QUALITIES[qualityName]) {
-    chordNotes.push((NOTES[rootName] + increment) % 12);
+    chordNotes.push((NOTES[rootName] + increment) % noteNames.length);
   }
   return chordNotes;
 };
