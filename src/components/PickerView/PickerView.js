@@ -20,14 +20,14 @@ export default class PickerView extends Component {
   chordSelectHandler = (index) => {
     this.setState(
       { rootSelected: index },
-      () => { this.chordChangeHelper() }
+      this.chordChangeHelper
     );
   };
 
   qualitySelectHandler = (index) => {
     this.setState(
-      { rootSelected: index },
-      () => { this.chordChangeHelper() }
+      { qualitySelected: index },
+      this.chordChangeHelper
     );
   };
 
