@@ -33,10 +33,11 @@ export default class ChordSelectionView extends Component {
 
 const styles = StyleSheet.create({
   chordSelectionViewStyle: {
-    width: "50%",
-    height: "80%",
+    width: "100%",
+    height: "100%",
+    flexDirection: "row",
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-around',
   },
 });
 

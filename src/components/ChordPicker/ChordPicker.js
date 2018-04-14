@@ -21,7 +21,9 @@ class ChordPicker extends Component {
           style={styles.pickerStyle}
           mode="dropdown"
           selectedValue={this.state.selectedItem}
-          onValueChange={(itemValue, itemIndex) => this.itemSelectionHandler(itemIndex)}>
+          onValueChange={(itemValue, itemIndex) => this.itemSelectionHandler(itemIndex)}
+          itemStyle={styles.pickerItemStyle}  // only works on iOS
+        >
           {
             this.props.selectionList.map((item, index) => {
               return (
@@ -33,13 +35,15 @@ class ChordPicker extends Component {
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
   pickerStyle: {
-    width: 110
+    width: 120,
   },
+  pickerItemStyle: {
+    fontSize: 25,
+  }
 });
 
 export default ChordPicker;

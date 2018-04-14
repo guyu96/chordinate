@@ -10,6 +10,10 @@ export default class PickerView extends Component {
     qualitySelected: 0,
   };
 
+  componentDidMount() {
+    this.chordChangeHelper();
+  }
+
   chordChangeHelper = () => {
     this.props.chordChangeHandler(
       noteNames[this.state.rootSelected],
@@ -53,8 +57,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
+    height: "70%",
+    maxWidth: 250,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
 });
