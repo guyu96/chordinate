@@ -79,10 +79,12 @@ export default class ChordSelectionView extends Component {
             <PianoChord style={styles.pianoChord} chordNotes={this.state.activeChordNotes}/>
           </View>
         </View>
-        <ProgressionBar
-          progression={this.state.chordProgression}
-          selectHandler={this.chordSelectHandler}
-        />
+        <View style={styles.progressionBarContainer}>
+          <ProgressionBar
+            progression={this.state.chordProgression}
+            selectHandler={this.chordSelectHandler}
+          />
+        </View>
       </View>
     );
   }
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
   },
 
   topContainer: {
-    flex: 3,
+    flex: 4,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -107,6 +109,7 @@ const styles = StyleSheet.create({
 
   innerContainer: {
     flexDirection: 'column',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
 
@@ -115,4 +118,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 20,
   },
+
+  progressionBarContainer: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: '#e6e6e6',
+  }
 });
