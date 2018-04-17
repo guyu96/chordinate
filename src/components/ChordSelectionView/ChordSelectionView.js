@@ -5,10 +5,16 @@ import Orientation from 'react-native-orientation';
 import { getChordNotes } from '../../chord.js';
 import PickerView from '../PickerView/PickerView';
 import PianoChord from '../PianoChord/PianoChord';
+import ProgressionBar from '../ProgressionBar/ProgressionBar'
 
 export default class ChordSelectionView extends Component {
   state = {
-    chordNotes: []
+    chordNotes: [],
+    chordProgression:  {
+      0: { text: 'Db'},
+      1: { text: 'G'},
+      2: { text: 'C'}
+    }
   };
 
   chordChangeHandler = (rootName, qualityName) => {
@@ -23,21 +29,27 @@ export default class ChordSelectionView extends Component {
 
   render() {
     return (
-      <View style={styles.chordSelectionViewStyle}>
-        <PickerView chordChangeHandler={this.chordChangeHandler}/>
-        <PianoChord chordNotes={this.state.chordNotes}/>
+      <View style={styles.chordSelectionView}>
+        <View style={styles.topContainer}>
+          <PickerView chordChangeHandler={this.chordChangeHandler}/>
+          <PianoChord chordNotes={this.state.chordNotes}/>
+        </View>
+        <ProgressionBar progression={this.state.chordProgression} />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  chordSelectionViewStyle: {
-    width: "100%",
-    height: "100%",
-    flexDirection: "row",
+  chordSelectionView: {
+    width: '100%',
+    height: '100%',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
   },
-});
 
+  topContainer: {
+    flex: 1
+  }
+});
