@@ -14,8 +14,9 @@ export default class ChordSelectionView extends Component {
       activeRoot: '',
       activeQuality: '',
       activeChordNotes: [],
+      chordProgression: {},
+      activeChordKey: -1,
       nextChordKey: 0,
-      chordProgression: {}
     };
   }
 
@@ -24,6 +25,13 @@ export default class ChordSelectionView extends Component {
       activeRoot: rootName,
       activeQuality: qualityName,
       activeChordNotes: getChordNotes(rootName, qualityName)
+    });
+  }
+
+  chordSelectHandler = (rootName, qualityName, activeChordKey) => {
+    this.chordChangeHandler(rootName, qualityName);
+    this.setState({
+      activeChordKey: activeChordKey
     });
   }
 
@@ -59,7 +67,10 @@ export default class ChordSelectionView extends Component {
             title='Add Chord'
           />
         </View>
-        <ProgressionBar progression={this.state.chordProgression} />
+        <ProgressionBar
+          progression={this.state.chordProgression}
+          selectHandler={this.chordSelectHandler}
+        />
       </View>
     );
   }

@@ -6,7 +6,7 @@ import {
   View,
   Dimensions,
   Animated,
-  Platform
+  Platform,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
 
@@ -21,6 +21,13 @@ export default class ProgressionBar extends Component {
           style={styles.list}
           data={this.props.progression}
           renderRow={this._renderRow}
+          onPressRow={(key) => {
+            this.props.selectHandler(
+              this.props.progression[key].root,
+              this.props.progression[key].quality,
+              key
+            );
+          }}
         />
       </View>
     );
@@ -76,7 +83,7 @@ class ChordTile extends Component {
   }
 
   render() {
-    const { data, active } = this.props;
+    const { data, active, selectHandler } = this.props;
     return (
       <Animated.View style={[
         styles.chordTile,
