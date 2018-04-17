@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    height: "70%",
+    height: "100%",
     maxWidth: 250,
     backgroundColor: '#fff',
     alignItems: 'center',

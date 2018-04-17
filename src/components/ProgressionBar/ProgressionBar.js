@@ -114,7 +114,21 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     marginHorizontal: 2,
-    borderRadius: 2
+    borderRadius: 2,
+
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgba(0,0,0,0.2)',
+        shadowOpacity: 1,
+        shadowOffset: {height: 2, width: 2},
+        shadowRadius: 2,
+      },
+
+      android: {
+        elevation: 0,
+        marginHorizontal: 0,
+      }
+    })
   },
 
   chordText: {

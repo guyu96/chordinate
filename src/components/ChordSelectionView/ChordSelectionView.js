@@ -61,11 +61,23 @@ export default class ChordSelectionView extends Component {
       <View style={styles.chordSelectionView}>
         <View style={styles.topContainer}>
           <PickerView chordChangeHandler={this.chordChangeHandler}/>
-          <PianoChord chordNotes={this.state.activeChordNotes}/>
-          <Button
-            onPress={this.chordAddHandler}
-            title='Add Chord'
-          />
+          <View style={styles.innerContainer}>
+            <View style={styles.buttons}>
+              <Button
+                onPress={this.chordAddHandler}
+                title='Add Chord'
+              />
+              <Button
+                //onPress={this.chordAddHandler}
+                title='Remove Chord'
+              />
+              <Button
+                //onPress={this.chordAddHandler}
+                title='Practice!'
+              />
+            </View>
+            <PianoChord style={styles.pianoChord} chordNotes={this.state.activeChordNotes}/>
+          </View>
         </View>
         <ProgressionBar
           progression={this.state.chordProgression}
@@ -86,6 +98,21 @@ const styles = StyleSheet.create({
   },
 
   topContainer: {
-    flex: 1
-  }
+    flex: 3,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  innerContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
 });
