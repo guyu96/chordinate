@@ -82,7 +82,7 @@ class ChordTile extends Component {
         styles.chordTile,
         this._style
       ]}>
-        <Text style={styles.chordText}>{ data.text }</Text>
+        <Text style={styles.chordText}>{ `${data.root} ${data.quality}` }</Text>
       </Animated.View>
     );
   }
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
 
   chordText: {
-    fontSize: 24,
+    fontSize: 16,
     color: '#222'
   }
 });
