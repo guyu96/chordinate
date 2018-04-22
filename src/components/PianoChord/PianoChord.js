@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Rect } from 'react-native-svg';
+import { getChordNotes } from '../../chord'
 
 const styles = {
   height: 100,
@@ -102,6 +103,7 @@ export default class PianoChord extends Component {
   }
 
   render() {
+    const chordNotes = getChordNotes(this.props.rootName, this.props.qualityName);
     const whiteKeys = whiteKeyNotes.map((note, index) => {
       const { x, y } = this.noteToXY(note);
       return this.renderWhiteKey(x, y, `white-key-${index}`);
@@ -110,7 +112,7 @@ export default class PianoChord extends Component {
       const { x, y } = this.noteToXY(note);
       return this.renderBlackKey(x, y, `black-key-${index}`);
     });
-    const indicators = this.props.chordNotes.map((note, index) => {
+    const indicators = chordNotes.map((note, index) => {
       const { x, y } = this.indicatorToXY(note);
       return this.renderIndicator(x, y, `indicator-${index}`);
     });

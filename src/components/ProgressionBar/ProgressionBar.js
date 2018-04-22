@@ -21,13 +21,7 @@ export default class ProgressionBar extends Component {
           style={styles.list}
           data={this.props.progression}
           renderRow={this._renderRow}
-          onPressRow={(key) => {
-            this.props.selectHandler(
-              this.props.progression[key].root,
-              this.props.progression[key].quality,
-              key
-            );
-          }}
+          onPressRow={ (key) => { this.props.selectHandler(key); } }
         />
       </View>
     );

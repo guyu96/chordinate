@@ -11,44 +11,46 @@ export default class ChordSelectionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeRoot: '',
-      activeQuality: '',
-      activeChordNotes: [],
-      chordProgression: {},
-      activeChordKey: -1,
-      nextChordKey: 0,
+      chordProgression: {
+        0 : {
+          root: '',
+          quality: ''
+        }
+      },
+      activeKey : 0,
+      nextChordKey : 1
     };
   }
 
   chordChangeHandler = (rootName, qualityName) => {
-    this.setState({
-      activeRoot: rootName,
-      activeQuality: qualityName,
-      activeChordNotes: getChordNotes(rootName, qualityName)
+    this.setState((prevState) => {
+      const newProgression = { ...prevState.chordProgression };
+      newProgression[prevState.activeKey] = {
+        root: rootName,
+        quality: qualityName
+      };
+      return { chordProgression : newProgression };
     });
   }
 
-  chordSelectHandler = (rootName, qualityName, activeChordKey) => {
-    this.chordChangeHandler(rootName, qualityName);
+  chordSelectHandler = (key) => {
     this.setState({
-      activeChordKey: activeChordKey
+      activeKey: key
     });
   }
 
   chordAddHandler = () => {
-    const newChord = {};
-    newChord[this.state.nextChordKey] = {
-      root: this.state.activeRoot,
-      quality: this.state.activeQuality
-    };
     this.setState((prevState) => {
+      const newChord = {};
+      newChord[prevState.nextChordKey] = { root : '', quality : '' };
       return {
-        nextChordKey: prevState.nextChordKey + 1,
         chordProgression : {
           ...prevState.chordProgression,
           ...newChord
-        }
-      }
+        },
+        activeKey : prevState.nextChordKey,
+        nextChordKey : prevState.nextChordKey + 1
+      };
     });
   }
 
@@ -60,7 +62,11 @@ export default class ChordSelectionView extends Component {
     return (
       <View style={styles.chordSelectionView}>
         <View style={styles.topContainer}>
-          <PickerView chordChangeHandler={this.chordChangeHandler}/>
+          <PickerView
+            chordChangeHandler={this.chordChangeHandler}
+            activeRoot={this.state.chordProgression[this.state.activeKey].root}
+            activeQuality={this.state.chordProgression[this.state.activeKey].quality}
+          />
           <View style={styles.innerContainer}>
             <View style={styles.buttons}>
               <Button
@@ -68,15 +74,19 @@ export default class ChordSelectionView extends Component {
                 title='Add Chord'
               />
               <Button
-                //onPress={this.chordAddHandler}
+                onPress={ () => {} }
                 title='Remove Chord'
               />
               <Button
-                //onPress={this.chordAddHandler}
+                onPress={ () => {} }
                 title='Practice!'
               />
             </View>
-            <PianoChord style={styles.pianoChord} chordNotes={this.state.activeChordNotes}/>
+            <PianoChord
+              rootName={this.state.chordProgression[this.state.activeKey].root}
+              qualityName={this.state.chordProgression[this.state.activeKey].quality}
+              style={styles.pianoChord}
+            />
           </View>
         </View>
         <View style={styles.progressionBarContainer}>
