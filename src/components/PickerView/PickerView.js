@@ -14,6 +14,35 @@ export default class PickerView extends Component {
     this.chordChangeHelper();
   }
 
+  /*
+    receive props from ChordSelectionView to select active chord
+  */
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const nextRoot = nextProps.activeRoot;
+    const nextQuality = nextProps.activeQuality;
+    let nextRootIndex = 0;
+    let nextQualityIndex = 0;
+    for (let i = 0; i < noteNames.length; i++) {
+      if (noteNames[i] == nextRoot) {
+        nextRootIndex = i;
+        break;
+      }
+    }
+    for (let i = 0; i < qualityNames.length; i++) {
+      if (qualityNames[i] == nextQuality) {
+        nextQualityIndex = i;
+        break;
+      }
+    }
+    if (nextRootIndex == prevState.rootSelected && nextQualityIndex == prevState.qualitySelected) {
+      return null;
+    }
+    return {
+      rootSelected: nextRootIndex,
+      qualitySelected: nextQualityIndex
+    }
+  }
+
   chordChangeHelper = () => {
     this.props.chordChangeHandler(
       noteNames[this.state.rootSelected],

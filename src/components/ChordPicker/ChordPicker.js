@@ -4,11 +4,23 @@ import { View, Picker, StyleSheet } from 'react-native';
 
 class ChordPicker extends Component {
   state = {
+    selectedIndex: this.props.selectedIndex,
     selectedItem: this.props.selectionList[this.props.selectedIndex]
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.selectedIndex == prevState.selectedIndex) {
+      return null;
+    }
+    return {
+      selectedIndex: nextProps.selectedIndex,
+      selectedItem: nextProps.selectionList[nextProps.selectedIndex]
+    };
+  }
+
   itemSelectionHandler = (index) => {
     this.setState({
+      selectedIndex: index,
       selectedItem: this.props.selectionList[index]
     });
     this.props.onItemSelected(index);
