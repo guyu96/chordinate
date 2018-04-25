@@ -5,9 +5,9 @@ import BPMSlider from '../BPMSlider/BPMSlider';
 
 class BPMSliderView extends Component {
     state = {
-        sliderbpm:80,
-        minBPM:50,
-        maxBPM:200,
+        sliderbpm:this.props.bpm,
+        minBPM: this.props.minBPM,
+        maxBPM:this.props.maxBPM,
     };
 
     BPMSelection = (SliderBPM) => {
