@@ -13,6 +13,11 @@ import SortableList from 'react-native-sortable-list';
 export default class ProgressionBar extends Component {
   _renderRow = ({data, active}) => <ChordTile data={data} active={active} />
 
+
+  chordOrderChangeHandler = (newSeq)=> {
+    this.props.mostRecentChordSequence(newSeq);
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -22,6 +27,7 @@ export default class ProgressionBar extends Component {
           data={this.props.progression}
           renderRow={this._renderRow}
           onPressRow={ (key) => { this.props.selectHandler(key); } }
+          onChangeOrder={(nextOrder) => {this.chordOrderChangeHandler(nextOrder)}}
         />
       </View>
     );

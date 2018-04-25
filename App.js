@@ -5,7 +5,7 @@ import { StackNavigator} from 'react-navigation';
 import ChordSelectionView from './src/components/ChordSelectionView/ChordSelectionView';
 import ChordPracticeView from './src/components/ChordPracticeView/ChordPracticeView';
 
-export default class App extends React.Component {
+class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -18,15 +18,34 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <ChordSelectionView /> */}
-        <ChordPracticeView
-          chordPracticeSequence={this.state.chordPracticeSequence}
-          elapseTime={1000}
-        />
+        <ChordSelectionView/>
       </View>
     );
+
   }
 }
+
+const RootStack = StackNavigator({
+    Home: {
+        screen: HomeScreen,
+    },
+    Practice:{
+        screen:ChordPracticeView
+    },
+    },
+    {
+        initialRouteName: 'Home',
+    }
+);
+
+export default class App extends React.Component{
+    render(){
+        return <RootStack/>
+    }
+}
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -36,3 +55,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
 });
+
+// export default StackNavigator({
+//     Home: {
+//         screen: HomeScreen,
+//     },
+// });

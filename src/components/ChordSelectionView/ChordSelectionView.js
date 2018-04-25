@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button} from 'react-native';
 import Orientation from 'react-native-orientation';
+import { withNavigation } from 'react-navigation';
 
 import { getChordNotes } from '../../chord.js';
 import PickerView from '../PickerView/PickerView';
 import PianoChord from '../PianoChord/PianoChord';
 import ProgressionBar from '../ProgressionBar/ProgressionBar'
 
-export default class ChordSelectionView extends Component {
+class ChordSelectionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +19,29 @@ export default class ChordSelectionView extends Component {
         }
       },
       activeKey : 0,
-      nextChordKey : 1
+      nextChordKey : 1,
+      ChordSequenceIndices:[]
     };
   }
+
+
+
+  // returns ana array of strings that represents the chords in the right order
+  getChordArrayForRender = (chordIndices, chordList) => {
+    return chordIndices.map(
+        function(indexVal){
+            return `${chordList[indexVal].root} ${chordList[indexVal].quality}`;
+        }
+    )
+  };
+
+
+  chordOrderChangeHandler = (chordIndices) => {
+    this.setState(
+        {ChordSequenceIndices:chordIndices}
+    );
+  };
+
 
   chordChangeHandler = (rootName, qualityName) => {
     this.setState((prevState) => {
@@ -78,7 +99,7 @@ export default class ChordSelectionView extends Component {
                 title='Remove Chord'
               />
               <Button
-                onPress={ () => {} }
+                onPress={ () => {this.props.navigation.navigate('Practice', {chordPracticeSequence: this.getChordArrayForRender(this.state.ChordSequenceIndices, this.state.chordProgression)})} }
                 title='Practice!'
               />
             </View>
@@ -93,6 +114,7 @@ export default class ChordSelectionView extends Component {
           <ProgressionBar
             progression={this.state.chordProgression}
             selectHandler={this.chordSelectHandler}
+            mostRecentChordSequence={this.chordOrderChangeHandler.bind(this)}
           />
         </View>
       </View>
@@ -135,3 +157,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#e6e6e6',
   }
 });
+
+export default withNavigation(ChordSelectionView);
