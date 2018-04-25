@@ -34,15 +34,15 @@ export default class ChordPracticeView extends Component {
     const prevChord = this.state.currentChord > 0 ?
       <View style={styles.previewChord}>
         <Text style={{color: 'white', fontSize: 50}}>
-          {this.props.chordPracticeSequence[this.state.currentChord - 1]}
+          {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord - 1]}
         </Text>
       </View>
       : null;
 
-    const nextChord = this.state.currentChord < this.props.chordPracticeSequence.length - 1 ?
+    const nextChord = this.state.currentChord < this.props.navigation.state.params.chordPracticeSequence.length - 1 ?
       <View style={styles.previewChord}>
         <Text style={{color: 'white', fontSize: 50}}>
-          {this.props.chordPracticeSequence[this.state.currentChord + 1]}
+          {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord + 1]}
         </Text>
       </View>
       : null;
@@ -57,7 +57,7 @@ export default class ChordPracticeView extends Component {
           {prevChord}
           <View style={styles.currentChord}>
             <Text style={{color: 'white', fontSize: 90}}>
-              {this.props.chordPracticeSequence[this.state.currentChord]}
+              {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord]}
             </Text>
           </View>
           {nextChord}
