@@ -3,10 +3,14 @@ import React, { Component } from 'react';
 import { View, Picker, StyleSheet } from 'react-native';
 
 class ChordPicker extends Component {
-  state = {
-    selectedIndex: this.props.selectedIndex,
-    selectedItem: this.props.selectionList[this.props.selectedIndex]
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedIndex: this.props.selectedIndex,
+      selectedItem: this.props.selectionList[this.props.selectedIndex]
+    };
+  }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.selectedIndex == prevState.selectedIndex) {
