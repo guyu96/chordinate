@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { StackNavigator} from 'react-navigation';
 
 import ChordSelectionView from './src/components/ChordSelectionView/ChordSelectionView';
 import ChordPracticeView from './src/components/ChordPracticeView/ChordPracticeView';
