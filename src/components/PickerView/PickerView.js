@@ -5,10 +5,13 @@ import ChordPicker from '../ChordPicker/ChordPicker';
 import { noteNames, qualityNames } from '../../chord';
 
 export default class PickerView extends Component {
-  state = {
-    rootSelected: 0,
-    qualitySelected: 0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      rootSelected: 0,
+      qualitySelected: 0,
+    };
+  }
 
   componentDidMount() {
     this.chordChangeHelper();

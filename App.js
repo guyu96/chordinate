@@ -2,13 +2,26 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import ChordSelectionView from './src/components/ChordSelectionView/ChordSelectionView';
+import ChordPracticeView from './src/components/ChordPracticeView/ChordPracticeView';
 
 export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      chordPracticeSequence: ["A maj", "C m", "F 7"]
+    }
+  }
 
   render() {
     return (
       <View style={styles.container}>
-        <ChordSelectionView />
+        {/* <ChordSelectionView /> */}
+        <ChordPracticeView
+          chordPracticeSequence={this.state.chordPracticeSequence}
+          elapseTime={1000}
+        />
       </View>
     );
   }
