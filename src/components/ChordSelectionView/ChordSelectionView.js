@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button} from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Orientation from 'react-native-orientation';
 import { withNavigation } from 'react-navigation';
 
@@ -20,7 +20,8 @@ class ChordSelectionView extends Component {
       },
       activeKey : 0,
       nextChordKey : 1,
-      ChordSequenceIndices:[]
+      chordSequenceIndices: [],
+      disableAddButton: true,
     };
   }
 
@@ -105,10 +106,14 @@ class ChordSelectionView extends Component {
           />
           <View style={styles.innerContainer}>
             <View style={styles.buttons}>
-              <Button
+              <TouchableOpacity
+                activeOpacity={ this.state.disableAddButton ? 1 : 0.7 }
+                disabled={this.state.disableAddButton}
                 onPress={this.chordAddHandler}
-                title='Add Chord'
-              />
+                style={styles.button}
+              >
+                <Text>Add Chord</Text>
+              </TouchableOpacity>
               <Button
                 onPress={ () => {} }
                 title='Remove Chord'
@@ -164,6 +169,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+  },
+
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10
   },
 
   progressionBarContainer: {
