@@ -10,7 +10,7 @@ export default class ChordPracticeView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentChord: 1,
+      currentChord: 0,
       shrinkBarStyles: { backgroundColor: 'gray', borderRadius: 1, height: 8 },
       shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
     }

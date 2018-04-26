@@ -24,24 +24,27 @@ class ChordSelectionView extends Component {
     };
   }
 
-
+  componentDidMount() {
+    Orientation.lockToLandscape();
+  }
 
   // returns ana array of strings that represents the chords in the right order
-  getChordArrayForRender = (chordIndices, chordList) => {
-    return chordIndices.map(
-        function(indexVal){
-            return `${chordList[indexVal].root} ${chordList[indexVal].quality}`;
-        }
-    )
+  getChordArrayForRender = () => {
+    var chords = this.state.chordSequenceIndices.map((indexVal) => {
+      return `${this.state.chordProgression[indexVal].root} ${this.state.chordProgression[indexVal].quality}`;
+    });
+    // do not include last placeholder chord
+    if (chords[chords.length - 1] === "") {
+      chords.splice(-1 , 1);
+    }
+    return chords;
   };
-
 
   chordOrderChangeHandler = (chordIndices) => {
-    this.setState(
-        {ChordSequenceIndices:chordIndices}
-    );
+    this.setState({
+      chordSequenceIndices: chordIndices
+    });
   };
-
 
   chordChangeHandler = (rootName, qualityName) => {
     this.setState((prevState) => {
@@ -50,7 +53,11 @@ class ChordSelectionView extends Component {
         root: rootName,
         quality: qualityName
       };
-      return { chordProgression : newProgression };
+      const emptyChord = (rootName === "" || qualityName === "");
+      return {
+        chordProgression: newProgression,
+        disableAddButton: emptyChord,
+      };
     });
   }
 
@@ -69,15 +76,23 @@ class ChordSelectionView extends Component {
           ...prevState.chordProgression,
           ...newChord
         },
+        chordSequenceIndices: [
+          ...prevState.chordSequenceIndices,
+          prevState.activeKey
+        ],
         activeKey : prevState.nextChordKey,
-        nextChordKey : prevState.nextChordKey + 1
+        nextChordKey : prevState.nextChordKey + 1,
+        disableAddButton: true
       };
     });
   }
 
-  componentDidMount() {
-    Orientation.lockToLandscape();
-  }
+  chordPracticeHandler = () => {
+    this.props.navigation.navigate('Practice', {
+      chordPracticeSequence: this.getChordArrayForRender(),
+      elapseTime: 1000,
+    })
+  };
 
   render() {
     return (
@@ -99,7 +114,7 @@ class ChordSelectionView extends Component {
                 title='Remove Chord'
               />
               <Button
-                onPress={ () => {this.props.navigation.navigate('Practice', {chordPracticeSequence: this.getChordArrayForRender(this.state.ChordSequenceIndices, this.state.chordProgression)})} }
+                onPress={this.chordPracticeHandler}
                 title='Practice!'
               />
             </View>

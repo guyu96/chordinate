@@ -27,10 +27,10 @@ class HomeScreen extends React.Component {
 
 const RootStack = StackNavigator({
     Home: {
-        screen: HomeScreen,
+        screen: HomeScreen
     },
     Practice:{
-        screen:ChordPracticeView
+        screen: ChordPracticeView
     },
     },
     {
