@@ -1,3 +1,4 @@
+const NUM_NOTES = 12;
 const NOTES = {
   '' : -1,
   'C' : 0,
@@ -40,7 +41,7 @@ export const getChordNotes = (rootName, qualityName) => {
 
   chordNotes = [NOTES[rootName]];
   for (let increment of QUALITIES[qualityName]) {
-    chordNotes.push((NOTES[rootName] + increment) % noteNames.length);
+    chordNotes.push((NOTES[rootName] + increment) % NUM_NOTES);
   }
   return chordNotes;
 };
