@@ -1,3 +1,7 @@
+# [v0.3](https://github.com/guyu96/chordinate/releases/tag/v0.3) - April 25
+### Added:
+ * ChordPracticeView, with card blocks showing practice chords, and a "shrink bar" for timing indication
+ * Navigation from ChordSelectionView to ChordPracticeView upon button click and pass in chord sequence data
 
 # [v0.2](https://github.com/guyu96/chordinate/releases/tag/v0.2) - April 17
 ### Added: 
