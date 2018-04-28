@@ -13,15 +13,16 @@ class ChordSelectionView extends Component {
     super(props);
     this.state = {
       chordProgression: {
-        0 : {
+        0: {
           root: '',
           quality: ''
         }
       },
-      activeKey : 0,
-      nextChordKey : 1,
+      activeKey: 0,
+      nextChordKey: 1,
       chordSequenceIndices: [],
       disableAddButton: true,
+      disableRemoveButton: true,
     };
   }
 
@@ -35,7 +36,7 @@ class ChordSelectionView extends Component {
       return `${this.state.chordProgression[indexVal].root} ${this.state.chordProgression[indexVal].quality}`;
     });
     // do not include last placeholder chord
-    if (chords[chords.length - 1] === "") {
+    if (chords[chords.length - 1] === '') {
       chords.splice(-1 , 1);
     }
     return chords;
@@ -54,7 +55,7 @@ class ChordSelectionView extends Component {
         root: rootName,
         quality: qualityName
       };
-      const emptyChord = (rootName === "" || qualityName === "");
+      const emptyChord = (rootName === '' || qualityName === '');
       return {
         chordProgression: newProgression,
         disableAddButton: emptyChord,
@@ -64,16 +65,18 @@ class ChordSelectionView extends Component {
 
   chordSelectHandler = (key) => {
     this.setState({
-      activeKey: key
+      activeKey: key,
+      disableRemoveButton: this.state.chordProgression[key].root === '' || this.state.chordProgression[key].quality === '',
     });
+    console.log(this.state);
   }
 
   chordAddHandler = () => {
     this.setState((prevState) => {
       const newChord = {};
-      newChord[prevState.nextChordKey] = { root : '', quality : '' };
+      newChord[prevState.nextChordKey] = { root: '', quality: '' };
       return {
-        chordProgression : {
+        chordProgression: {
           ...prevState.chordProgression,
           ...newChord
         },
@@ -81,14 +84,50 @@ class ChordSelectionView extends Component {
           ...prevState.chordSequenceIndices,
           prevState.activeKey
         ],
-        activeKey : prevState.nextChordKey,
-        nextChordKey : prevState.nextChordKey + 1,
+        activeKey: prevState.nextChordKey,
+        nextChordKey: prevState.nextChordKey + 1,
         disableAddButton: true
       };
     });
   }
 
+  removeChordByKey = (prevProgression, deleteKey) => {
+    return Object.keys(prevProgression) // Ojbect.keys returns a list of string, so we need parseInt
+      .filter(key => parseInt(key) !== deleteKey)
+      .reduce((newProgression, current) => {
+        newProgression[current] = prevProgression[current];
+        return newProgression;
+      }, {});
+  }
+
+  removeChordIndex = (prevIndices, prevActiveKey) => {
+    let arr = prevIndices.filter(e => {
+      return e !== prevActiveKey;
+    });
+    return arr;
+  }
+
+  chordRemoveHandler = () => {
+    this.setState((prevState) => {
+      // do not remove empty placeholder chord
+      if (prevState.chordProgression[prevState.activeKey].root === '' || prevState.chordProgression[prevState.activeKey].quality === '') {
+        return prevState;
+      }
+      return {
+        chordProgression: this.removeChordByKey(prevState.chordProgression, prevState.activeKey),
+        chordSequenceIndices: this.removeChordIndex(prevState.chordSequenceIndices, prevState.activeKey),
+        activeKey: prevState.nextChordKey - 1, // move activeKey to empty placeholder
+        disableRemoveButton: true, // disable remove button because we are focusing on placeholder chord
+      }
+    });
+  }
+
   chordPracticeHandler = () => {
+    if (this.state.chordSequenceIndices.length == 0) {
+      alert("Please select a valid chord sequence to practice.");
+      console.log(this.state);
+      return;
+    }
     this.props.navigation.navigate('Practice', {
       chordPracticeSequence: this.getChordArrayForRender(),
       elapseTime: 1000,
@@ -107,17 +146,19 @@ class ChordSelectionView extends Component {
           <View style={styles.innerContainer}>
             <View style={styles.buttons}>
               <TouchableOpacity
-                activeOpacity={ this.state.disableAddButton ? 1 : 0.7 }
                 disabled={this.state.disableAddButton}
                 onPress={this.chordAddHandler}
                 style={styles.button}
               >
                 <Text>Add Chord</Text>
               </TouchableOpacity>
-              <Button
-                onPress={ () => {} }
-                title='Remove Chord'
-              />
+              <TouchableOpacity
+                disabled={this.state.disableRemoveButton}
+                onPress={this.chordRemoveHandler}
+                style={styles.button}
+              >
+                <Text>Remove Chord</Text>
+              </TouchableOpacity>
               <Button
                 onPress={this.chordPracticeHandler}
                 title='Practice!'
