@@ -125,7 +125,6 @@ class ChordSelectionView extends Component {
   chordPracticeHandler = () => {
     if (this.state.chordSequenceIndices.length == 0) {
       alert("Please select a valid chord sequence to practice.");
-      console.log(this.state);
       return;
     }
     this.props.navigation.navigate('Practice', {

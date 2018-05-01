@@ -4,6 +4,7 @@ import Orientation from 'react-native-orientation';
 import { StyleSheet, View, Text, Button, Animated } from 'react-native';
 
 const initShrinkBarWidth = 500;
+var sequenceLength;
 
 export default class ChordPracticeView extends Component {
 
@@ -11,9 +12,14 @@ export default class ChordPracticeView extends Component {
     super(props);
     this.state = {
       currentChord: 0,
-      shrinkBarStyles: { backgroundColor: 'gray', borderRadius: 1, height: 8 },
+      shrinkBarStyles: {
+        backgroundColor: 'gray',
+        borderRadius: 1,
+        height: 8
+      },
       shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
-    }
+    };
+    sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
   }
 
   componentDidMount() {
@@ -27,25 +33,24 @@ export default class ChordPracticeView extends Component {
         toValue: 0,
         duration: this.props.elapseTime,
       }
-    ).start();
+    ).start(() => {
+      this.setState((prevState) => {
+        return {
+          currentChord: prevState.currentChord + 1,
+          shrinkBarWidth: new Animated.Value(initShrinkBarWidth)
+        }
+      });
+      if (this.state.currentChord < sequenceLength) {
+        this.startPracticeHandler();
+      }
+    });
   };
 
   render() {
-    const prevChord = this.state.currentChord > 0 ?
-      <View style={styles.previewChord}>
-        <Text style={{color: 'white', fontSize: 50}}>
-          {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord - 1]}
-        </Text>
-      </View>
-      : null;
-
-    const nextChord = this.state.currentChord < this.props.navigation.state.params.chordPracticeSequence.length - 1 ?
-      <View style={styles.previewChord}>
-        <Text style={{color: 'white', fontSize: 50}}>
-          {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord + 1]}
-        </Text>
-      </View>
-      : null;
+    let hasPrevChord = this.state.currentChord > 0;
+    let prevChordText = hasPrevChord? this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord - 1] : '';
+    let hasNextChord = this.state.currentChord < sequenceLength - 1;
+    let nextChordText = hasNextChord? this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord + 1] : '';
 
     return (
       <View style={styles.outerContainer}>
@@ -54,13 +59,21 @@ export default class ChordPracticeView extends Component {
           title='Start Practice'
         />
         <View style={styles.slideShowView}>
-          {prevChord}
+          <View style={{ ...previewChordStyle, opacity: hasPrevChord? 1: 0 }}>
+            <Text style={{color: 'white', fontSize: 50}}>
+              {prevChordText}
+            </Text>
+          </View>
           <View style={styles.currentChord}>
             <Text style={{color: 'white', fontSize: 90}}>
               {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord]}
             </Text>
           </View>
-          {nextChord}
+          <View style={{ ...previewChordStyle, opacity: hasNextChord? 1: 0 }}>
+            <Text style={{color: 'white', fontSize: 50}}>
+              {nextChordText}
+            </Text>
+          </View>
         </View>
         <Animated.View
           style={{
@@ -72,6 +85,15 @@ export default class ChordPracticeView extends Component {
       </View>
     )
   }
+};
+
+const previewChordStyle = {
+  width: 150,
+  height: 150,
+  borderRadius: 10,
+  backgroundColor: 'grey',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
 const styles = StyleSheet.create({
@@ -87,15 +109,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-  },
-
-  previewChord: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
-    backgroundColor: 'grey',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
   currentChord: {
