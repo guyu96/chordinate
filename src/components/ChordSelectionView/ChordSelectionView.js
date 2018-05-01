@@ -21,6 +21,7 @@ class ChordSelectionView extends Component {
       activeKey: 0,
       nextChordKey: 1,
       chordSequenceIndices: [],
+      bpm: 100,
       disableAddButton: true,
       disableRemoveButton: true,
     };
@@ -68,7 +69,6 @@ class ChordSelectionView extends Component {
       activeKey: key,
       disableRemoveButton: this.state.chordProgression[key].root === '' || this.state.chordProgression[key].quality === '',
     });
-    console.log(this.state);
   }
 
   chordAddHandler = () => {
@@ -129,7 +129,7 @@ class ChordSelectionView extends Component {
     }
     this.props.navigation.navigate('Practice', {
       chordPracticeSequence: this.getChordArrayForRender(),
-      elapseTime: 1000,
+      elapseTime: 60000.0 / this.state.bpm, // 60,000 ms
     })
   };
 
@@ -176,7 +176,7 @@ class ChordSelectionView extends Component {
           <ProgressionBar
             progression={this.state.chordProgression}
             selectHandler={this.chordSelectHandler}
-            mostRecentChordSequence={this.chordOrderChangeHandler.bind(this)}
+            mostRecentChordSequence={this.chordOrderChangeHandler}
           />
         </View>
       </View>

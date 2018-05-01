@@ -18,6 +18,7 @@ export default class ChordPracticeView extends Component {
         height: 8
       },
       shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
+      practiceSpeed: this.props.navigation.state.params.elapseTime
     };
     sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
   }
@@ -31,7 +32,7 @@ export default class ChordPracticeView extends Component {
       this.state.shrinkBarWidth,
       {
         toValue: 0,
-        duration: this.props.elapseTime,
+        duration: this.state.practiceSpeed,
       }
     ).start(() => {
       this.setState((prevState) => {
