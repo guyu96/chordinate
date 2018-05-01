@@ -21,6 +21,7 @@ export default class ChordPracticeView extends Component {
       practiceSpeed: this.props.navigation.state.params.elapseTime
     };
     sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
+    //console.log(this.state.practiceSpeed);
   }
 
   componentDidMount() {

@@ -6,7 +6,12 @@ import { withNavigation } from 'react-navigation';
 import { getChordNotes } from '../../chord.js';
 import PickerView from '../PickerView/PickerView';
 import PianoChord from '../PianoChord/PianoChord';
-import ProgressionBar from '../ProgressionBar/ProgressionBar'
+import ProgressionBar from '../ProgressionBar/ProgressionBar';
+import BPMSlider from '../BPMSlider/BPMSlider';
+
+const minBPM = 30;
+const maxBPM = 240;
+const defaultBPM = 100;
 
 class ChordSelectionView extends Component {
   constructor(props) {
@@ -21,7 +26,7 @@ class ChordSelectionView extends Component {
       activeKey: 0,
       nextChordKey: 1,
       chordSequenceIndices: [],
-      bpm: 100,
+      bpm: defaultBPM,
       disableAddButton: true,
       disableRemoveButton: true,
     };
@@ -29,6 +34,12 @@ class ChordSelectionView extends Component {
 
   componentDidMount() {
     Orientation.lockToLandscape();
+  }
+
+  BPMUpdateHandler = (newBPM) => {
+    this.setState({
+      bpm: newBPM
+    });
   }
 
   // returns ana array of strings that represents the chords in the right order
@@ -136,13 +147,22 @@ class ChordSelectionView extends Component {
   render() {
     return (
       <View style={styles.chordSelectionView}>
-        <View style={styles.topContainer}>
-          <PickerView
-            chordChangeHandler={this.chordChangeHandler}
-            activeRoot={this.state.chordProgression[this.state.activeKey].root}
-            activeQuality={this.state.chordProgression[this.state.activeKey].quality}
-          />
-          <View style={styles.innerContainer}>
+        <View style={styles.outerContainer}>
+          <View style={styles.innerLeftContainer}>
+            <BPMSlider
+                bpm={this.state.bpm}
+                minBPM={minBPM}
+                maxBPM={maxBPM}
+                BPMHandler={this.BPMUpdateHandler}
+            />
+            <PickerView
+              chordChangeHandler={this.chordChangeHandler}
+              activeRoot={this.state.chordProgression[this.state.activeKey].root}
+              activeQuality={this.state.chordProgression[this.state.activeKey].quality}
+            />
+          </View>
+
+          <View style={styles.innerRightContainer}>
             <View style={styles.buttons}>
               <TouchableOpacity
                 disabled={this.state.disableAddButton}
@@ -165,13 +185,14 @@ class ChordSelectionView extends Component {
                 <Text>Practice</Text>
               </TouchableOpacity>
             </View>
+
             <PianoChord
               rootName={this.state.chordProgression[this.state.activeKey].root}
               qualityName={this.state.chordProgression[this.state.activeKey].quality}
-              style={styles.pianoChord}
             />
           </View>
         </View>
+
         <View style={styles.progressionBarContainer}>
           <ProgressionBar
             progression={this.state.chordProgression}
@@ -193,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  topContainer: {
+  outerContainer: {
     flex: 4,
     width: '100%',
     flexDirection: 'row',
@@ -201,7 +222,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  innerContainer: {
+  innerLeftContainer: {
+    width: '45%',
+    height: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  innerRightContainer: {
+    width: '55%',
+    height: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -209,7 +240,8 @@ const styles = StyleSheet.create({
 
   buttons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
     marginBottom: 20,
   },
 
