@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { Text, View, Button, TouchableOpacity, Switch, StyleSheet} from 'react-native';
 import Orientation from 'react-native-orientation';
 import { withNavigation } from 'react-navigation';
 
@@ -30,6 +30,7 @@ class ChordSelectionView extends Component {
       bpm: defaultBPM,
       disableAddButton: true,
       disableRemoveButton: true,
+      gameMode: false,
     };
   }
 
@@ -154,6 +155,12 @@ class ChordSelectionView extends Component {
     })
   };
 
+  toggleGameMode = (toggle) => {
+    this.setState({
+      gameMode: toggle
+    });
+  }
+
   render() {
     return (
       <View style={styles.chordSelectionView}>
@@ -195,11 +202,22 @@ class ChordSelectionView extends Component {
                 <Text>Practice</Text>
               </TouchableOpacity>
             </View>
+            <View style={styles.gameModeContainer}>
+              <Text style={styles.gameModeText}>Game Mode</Text>
+              <Switch
+                onValueChange={(val) => this.toggleGameMode(val)}
+                value={this.state.gameMode}
+              />
+            </View>
 
-            <PianoChord
-              rootName={this.state.chordProgression[this.state.activeKey].root}
-              qualityName={this.state.chordProgression[this.state.activeKey].quality}
-            />
+            <View style={styles.pianoChordContainer}>
+              <PianoChord
+                rootName={this.state.chordProgression[this.state.activeKey].root}
+                qualityName={this.state.chordProgression[this.state.activeKey].quality}
+                style={styles.pianoChord}
+              />
+            </View>
+
           </View>
         </View>
 
@@ -243,18 +261,17 @@ const styles = StyleSheet.create({
   innerRightContainer: {
     width: '55%',
     height: '100%',
+    paddingRight: 20,
     flexDirection: 'column',
-    alignItems: 'center',
     justifyContent: 'space-between',
   },
 
   buttons: {
+    flex: 1,
     flexDirection: 'row',
+    alignSelf: 'flex-end',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20,
   },
-
   button: {
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
@@ -262,11 +279,30 @@ const styles = StyleSheet.create({
     margin: 5
   },
 
+  gameModeContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    alignItems: "stretch",
+    justifyContent: "center"
+  },
+  gameModeSwitch: {
+    alignSelf: 'center',
+  },
+	gameModeText: {
+		alignSelf: 'center'
+  },
+
+  pianoChordContainer: {
+    flex: 3,
+    borderWidth: 2,
+  },
+
   progressionBarContainer: {
     flex: 1,
     width: '100%',
     backgroundColor: '#e6e6e6',
-  }
+  },
 });
 
 export default withNavigation(ChordSelectionView);
