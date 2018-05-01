@@ -64,7 +64,7 @@ export default class ChordPracticeView extends Component {
           title='Start Practice'
         />
         <View style={styles.slideShowView}>
-          <View style={{ ...previewChordStyle, opacity: hasPrevChord? 1: 0 }}>
+          <View style={{ ...previewChordStyle, opacity: hasPrevChord? 0.8: 0 }}>
             <Text style={styles.previewChordText}>
               {prevChordText}
             </Text>
@@ -74,7 +74,7 @@ export default class ChordPracticeView extends Component {
               {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord]}
             </Text>
           </View>
-          <View style={{ ...previewChordStyle, opacity: hasNextChord? 1: 0 }}>
+          <View style={{ ...previewChordStyle, opacity: hasNextChord? 0.8: 0 }}>
             <Text style={styles.previewChordText}>
               {nextChordText}
             </Text>

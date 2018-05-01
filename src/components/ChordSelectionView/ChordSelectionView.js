@@ -158,10 +158,12 @@ class ChordSelectionView extends Component {
               >
                 <Text>Remove Chord</Text>
               </TouchableOpacity>
-              <Button
+              <TouchableOpacity
                 onPress={this.chordPracticeHandler}
-                title='Practice!'
-              />
+                style={styles.button}
+              >
+                <Text>Practice</Text>
+              </TouchableOpacity>
             </View>
             <PianoChord
               rootName={this.state.chordProgression[this.state.activeKey].root}
@@ -214,7 +216,8 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
-    padding: 10
+    padding: 8,
+    margin: 5
   },
 
   progressionBarContainer: {
