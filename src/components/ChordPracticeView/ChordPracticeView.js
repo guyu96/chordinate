@@ -42,6 +42,11 @@ export default class ChordPracticeView extends Component {
       });
       if (this.state.currentChord < sequenceLength) {
         this.startPracticeHandler();
+      } else {  // end of practice sequence
+        this.setState({
+          currentChord: 0,
+          shrinkBarWidth: new Animated.Value(initShrinkBarWidth)
+        });
       }
     });
   };
@@ -60,17 +65,17 @@ export default class ChordPracticeView extends Component {
         />
         <View style={styles.slideShowView}>
           <View style={{ ...previewChordStyle, opacity: hasPrevChord? 1: 0 }}>
-            <Text style={{color: 'white', fontSize: 50}}>
+            <Text style={styles.previewChordText}>
               {prevChordText}
             </Text>
           </View>
           <View style={styles.currentChord}>
-            <Text style={{color: 'white', fontSize: 90}}>
+            <Text style={styles.currentChordText}>
               {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord]}
             </Text>
           </View>
           <View style={{ ...previewChordStyle, opacity: hasNextChord? 1: 0 }}>
-            <Text style={{color: 'white', fontSize: 50}}>
+            <Text style={styles.previewChordText}>
               {nextChordText}
             </Text>
           </View>
@@ -120,4 +125,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  currentChordText: {
+    color: 'white',
+    fontSize: 90
+  },
+
+  previewChordText: {
+    color: 'white',
+    fontSize: 50
+  }
 });
