@@ -26,7 +26,7 @@ export default class ProgressionBar extends Component {
           data={this.props.progression}
           renderRow={this._renderRow}
           onPressRow={ (key) => { this.props.selectHandler(parseInt(key)); } }
-          onChangeOrder={(nextOrder) => {this.chordOrderChangeHandler(nextOrder)}}
+          onChangeOrder={ (nextOrder) => {this.chordOrderChangeHandler(nextOrder)} }
         />
       </View>
     );
@@ -83,9 +83,10 @@ class ChordTile extends Component {
 
   render() {
     const { data, active, selectHandler } = this.props;
+    const tileStyle = data.active ? styles.chordTileSelected : styles.chordTile;
     return (
       <Animated.View style={[
-        styles.chordTile,
+        tileStyle,
         this._style
       ]}>
         <Text style={styles.chordText}>{ `${data.root} ${data.quality}` }</Text>
@@ -95,6 +96,23 @@ class ChordTile extends Component {
 }
 
 const window = Dimensions.get('window');
+
+const chordTileStyle = {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 10,
+  width: 80,
+  height: 80,
+  borderColor: '#666',
+  borderWidth: 1,
+};
+const chordTileSelectedStyle = {
+  ...chordTileStyle,
+  borderColor: '#161616',
+  borderWidth: 2,
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -105,30 +123,8 @@ const styles = StyleSheet.create({
     width: window.width
   },
 
-  chordTile: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    width: 80,
-    height: 80,
-    marginHorizontal: 2,
-    borderRadius: 2,
-
-    ...Platform.select({
-      ios: {
-        shadowColor: 'rgba(0,0,0,0.2)',
-        shadowOpacity: 1,
-        shadowOffset: {height: 2, width: 2},
-        shadowRadius: 2,
-      },
-
-      android: {
-        elevation: 0,
-        marginHorizontal: 0,
-      }
-    })
-  },
+  chordTile: chordTileStyle,
+  chordTileSelected: chordTileSelectedStyle,
 
   chordText: {
     fontSize: 16,

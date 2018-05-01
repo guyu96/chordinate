@@ -20,7 +20,8 @@ class ChordSelectionView extends Component {
       chordProgression: {
         0: {
           root: '',
-          quality: ''
+          quality: '',
+          active: true
         }
       },
       activeKey: 0,
@@ -63,34 +64,40 @@ class ChordSelectionView extends Component {
   chordChangeHandler = (rootName, qualityName) => {
     this.setState((prevState) => {
       const newProgression = { ...prevState.chordProgression };
-      newProgression[prevState.activeKey] = {
-        root: rootName,
-        quality: qualityName
-      };
-      const emptyChord = (rootName === '' || qualityName === '');
+      newProgression[prevState.activeKey].root = rootName;
+      newProgression[prevState.activeKey].quality = qualityName;
+      const chordIsIncomplete = rootName === '' || qualityName === '';
       return {
         chordProgression: newProgression,
-        disableAddButton: emptyChord,
+        disableAddButton: chordIsIncomplete,
       };
     });
   }
 
   chordSelectHandler = (key) => {
-    this.setState({
-      activeKey: key,
-      disableRemoveButton: this.state.chordProgression[key].root === '' || this.state.chordProgression[key].quality === '',
+    this.setState((prevState) => {
+      const newProgression  = { ...prevState.chordProgression };
+      newProgression[prevState.activeKey].active = false;
+      newProgression[key].active = true;
+      return {
+        chordProgression: newProgression,
+        activeKey: key,
+        disableRemoveButton: this.state.chordProgression[key].root === '' || this.state.chordProgression[key].quality === ''
+      };
     });
   }
 
   chordAddHandler = () => {
     this.setState((prevState) => {
-      const newChord = {};
-      newChord[prevState.nextChordKey] = { root: '', quality: '' };
+      const newProgression = { ...prevState.chordProgression };
+      newProgression[prevState.activeKey].active = false;
+      newProgression[prevState.nextChordKey] = {
+        root : '',
+        quality : '',
+        active: true
+      };
       return {
-        chordProgression: {
-          ...prevState.chordProgression,
-          ...newChord
-        },
+        chordProgression: newProgression,
         chordSequenceIndices: [
           ...prevState.chordSequenceIndices,
           prevState.activeKey
@@ -103,7 +110,8 @@ class ChordSelectionView extends Component {
   }
 
   removeChordByKey = (prevProgression, deleteKey) => {
-    return Object.keys(prevProgression) // Ojbect.keys returns a list of string, so we need parseInt
+    // Object.keys returns a list of strings, so we need parseInt
+    return Object.keys(prevProgression)
       .filter(key => parseInt(key) !== deleteKey)
       .reduce((newProgression, current) => {
         newProgression[current] = prevProgression[current];
@@ -124,8 +132,10 @@ class ChordSelectionView extends Component {
       if (prevState.chordProgression[prevState.activeKey].root === '' || prevState.chordProgression[prevState.activeKey].quality === '') {
         return prevState;
       }
+      const newProgression = this.removeChordByKey(prevState.chordProgression, prevState.activeKey);
+      newProgression[prevState.nextChordKey - 1].active = true;
       return {
-        chordProgression: this.removeChordByKey(prevState.chordProgression, prevState.activeKey),
+        chordProgression: newProgression,
         chordSequenceIndices: this.removeChordIndex(prevState.chordSequenceIndices, prevState.activeKey),
         activeKey: prevState.nextChordKey - 1, // move activeKey to empty placeholder
         disableRemoveButton: true, // disable remove button because we are focusing on placeholder chord
