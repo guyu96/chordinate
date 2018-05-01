@@ -10,19 +10,29 @@ const BPMSlider = (props) => {
 				value={props.bpm}
 				step={1}
 				onValueChange={(currentBPM) => props.BPMHandler(currentBPM)}
+				style={styles.slider}
 			/>
-			<Text>BPM: {props.bpm}</Text>
+			<Text style={styles.bpmText}>{props.bpm} BPM</Text>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		width: '60%',
+		width: '90%',
 		margin: 10,
+		flexDirection: 'row',
     alignItems: "stretch",
     justifyContent: "center"
-  }
+	},
+	slider: {
+		width: '70%',
+		marginRight: 5,
+	},
+	bpmText: {
+		width: '30%',
+		alignSelf: 'center'
+	}
 });
 
 export default BPMSlider;
