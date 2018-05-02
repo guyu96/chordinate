@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button, TouchableOpacity, Switch, StyleSheet, TextInput, AsyncStorage} from 'react-native';
+import { Text, View, Button, TouchableOpacity, StyleSheet, TextInput, AsyncStorage} from 'react-native';
 import Orientation from 'react-native-orientation';
 import { withNavigation } from 'react-navigation';
 
@@ -16,28 +16,23 @@ const defaultBPM = 100;
 class ChordSelectionView extends Component {
   constructor(props) {
     super(props);
-    if(this.props.navigation.state.params){
-      this.state = JSON.parse(this.props.navigation.state.params);
-    }
-    else {
-      this.state = {
-        chordProgression: {
-          0: {
-            root: '',
-            quality: '',
-            active: true
-          }
-        },
-        activeKey: 0,
-        nextChordKey: 1,
-        chordSequenceIndices: [],
-        bpm: defaultBPM,
-        disableAddButton: true,
-        disableRemoveButton: true,
-        gameMode: false,
-        sequenceName: ''
-      };
-    }
+    this.state = {
+      chordProgression: {
+        0: {
+          root: '',
+          quality: '',
+          active: true
+        }
+      },
+      activeKey: 0,
+      placeholderKey: 0,
+      nextChordKey: 1,
+      chordSequenceIndices: [],
+      bpm: defaultBPM,
+      disableAddButton: true,
+      disableRemoveButton: true,
+      sequenceName: ''
+    };
   }
 
   componentDidMount() {
@@ -52,14 +47,14 @@ class ChordSelectionView extends Component {
 
   // returns ana array of strings that represents the chords in the right order
   getChordArrayForRender = () => {
-    var chords = this.state.chordSequenceIndices.map((indexVal) => {
+    return this.state.chordSequenceIndices
+    .filter((indexVal) => {
+      // filter the placeholder chord
+      return indexVal !== this.state.placeholderKey;
+    })
+    .map((indexVal) => {
       return `${this.state.chordProgression[indexVal].root} ${this.state.chordProgression[indexVal].quality}`;
     });
-    // do not include last placeholder chord
-    if (chords[chords.length - 1] === '') {
-      chords.splice(-1 , 1);
-    }
-    return chords;
   };
 
   chordOrderChangeHandler = (chordIndices) => {
@@ -86,10 +81,14 @@ class ChordSelectionView extends Component {
       const newProgression  = { ...prevState.chordProgression };
       newProgression[prevState.activeKey].active = false;
       newProgression[key].active = true;
+      const chordIsIncomplete = this.state.chordProgression[key].root === '' || this.state.chordProgression[key].quality === '';
       return {
         chordProgression: newProgression,
         activeKey: key,
-        disableRemoveButton: this.state.chordProgression[key].root === '' || this.state.chordProgression[key].quality === ''
+        // disable remove button if current chord is placeholder chord
+        disableRemoveButton: key === this.state.placeholderKey,
+        // disable add button if current chord is not placeholder chord or is incomplete
+        disableAddButton: key !== this.state.placeholderKey || chordIsIncomplete,
       };
     });
   }
@@ -110,6 +109,7 @@ class ChordSelectionView extends Component {
           prevState.activeKey
         ],
         activeKey: prevState.nextChordKey,
+        placeholderKey: prevState.nextChordKey,
         nextChordKey: prevState.nextChordKey + 1,
         disableAddButton: true
       };
@@ -134,11 +134,11 @@ class ChordSelectionView extends Component {
   }
 
   chordRemoveHandler = () => {
+    // safety check
+    if (this.state.activeKey == this.state.placeholderKey) {
+      return;
+    }
     this.setState((prevState) => {
-      // do not remove empty placeholder chord
-      if (prevState.chordProgression[prevState.activeKey].root === '' || prevState.chordProgression[prevState.activeKey].quality === '') {
-        return prevState;
-      }
       const newProgression = this.removeChordByKey(prevState.chordProgression, prevState.activeKey);
       newProgression[prevState.nextChordKey - 1].active = true;
       return {
@@ -164,15 +164,9 @@ class ChordSelectionView extends Component {
     AsyncStorage.setItem(this.state.sequenceName, JSON.stringify(this.state));
     this.props.navigation.navigate('Practice', {
       chordPracticeSequence: this.getChordArrayForRender(),
-      elapseTime: 60000.0 / this.state.bpm, // 60,000 ms
+      bpm: this.state.bpm,
     })
   };
-
-  toggleGameMode = (toggle) => {
-    this.setState({
-      gameMode: toggle
-    });
-  }
 
   render() {
     return (
@@ -219,13 +213,6 @@ class ChordSelectionView extends Component {
               >
                 <Text style={styles.buttonText}>Practice</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.gameModeContainer}>
-              <Text style={styles.gameModeText}>Game Mode</Text>
-              <Switch
-                onValueChange={(val) => this.toggleGameMode(val)}
-                value={this.state.gameMode}
-              />
             </View>
 
             <View style={styles.pianoChordContainer}>
@@ -298,17 +285,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17
-  },
-
-  gameModeContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    justifyContent: "center"
-  },
-	gameModeText: {
-    marginRight: 5,
   },
 
   pianoChordContainer: {
