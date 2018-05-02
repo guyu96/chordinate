@@ -294,8 +294,7 @@ const styles = StyleSheet.create({
   },
 
   pianoChordContainer: {
-    flex: 3,
-    borderWidth: 2,
+    flex: 3
   },
 
   progressionBarContainer: {

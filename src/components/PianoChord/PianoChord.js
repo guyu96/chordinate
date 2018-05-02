@@ -4,19 +4,25 @@ import Svg, { Circle, Rect } from 'react-native-svg';
 import { getChordNotes } from '../../chord'
 
 const styles = {
-  height: 100,
-  width: 259,
-  whiteKeyHeight: 100,
-  whiteKeyWidth: 36,
-  blackKeyHeight: 50,
-  blackKeyWidth: 22,
-  borderSize: 1,
+  height: 1100,
+  width: 2200,
+  // whiteKeyHeight: 100,
+  // whiteKeyWidth: 36,
+  // blackKeyHeight: 50,
+  // blackKeyWidth: 22,
+  borderSize: 3,
   indicatorRadius: 5,
   whiteKeyColor: '#FFF',
   blackKeyColor: '#000',
   borderColor: '#222',
-  indicatorColor: '#345E6C'
+  indicatorColor: '#0295FC'
 };
+styles.borderSize = Math.floor(styles.height * 0.005);
+styles.indicatorRadius = Math.floor(styles.height * 0.05);
+styles.whiteKeyHeight = styles.height;
+styles.whiteKeyWidth = Math.floor((styles.width - 8 * styles.borderSize) / 7);
+styles.blackKeyHeight = Math.floor(styles.whiteKeyHeight * 0.6);
+styles.blackKeyWidth = Math.floor(styles.whiteKeyWidth * 0.6);
 
 const whiteKeyNotes = [0, 2, 4, 5, 7, 9, 11];
 const blackKeyNotes = [1, 3, 6, 8, 10];
@@ -92,8 +98,6 @@ export default class PianoChord extends Component {
       cx: x.toString(),
       cy: y.toString(),
       r: styles.indicatorRadius.toString(),
-      stroke: styles.borderColor,
-      strokeWidth: styles.borderSize.toString(),
       fill: styles.indicatorColor,
       key: key
     };
@@ -117,8 +121,9 @@ export default class PianoChord extends Component {
       return this.renderIndicator(x, y, `indicator-${index}`);
     });
     const attr = {
-      height: styles.height.toString(),
-      width: styles.width.toString()
+      viewBox: `0 0 ${styles.width} ${styles.height}`,
+      height: '100%',
+      width: '100%'
     };
     return (
       <Svg {...attr}>
