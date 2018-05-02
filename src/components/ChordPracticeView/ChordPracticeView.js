@@ -10,7 +10,6 @@ import {
   Animated,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
 } from 'react-native';
 
 import CountDownTimer from 'chordinate/src/components/CountDownTimer/CountDownTimer';
@@ -23,18 +22,6 @@ const bpmIncreaseStep = 30;
 const minBPM = 30;
 const maxBPM = 240;
 const defaultBPM = 100;
-
-/*
-  font scaling reference: https://stackoverflow.com/a/49532212
-*/
-SCREEN_WIDTH = Dimensions.get('window').width; // get current width
-SCALE = 375; // constant, 375 is standard width of iphone 6 / 7 / 8
-
-const scaleFontSize = (fontSize) => {
-  const ratio = fontSize / SCALE; // get ratio based on your standard scale
-  const newSize = Math.round(ratio * SCREEN_WIDTH);
-  return newSize;
-}
 
 export default class ChordPracticeView extends Component {
   constructor(props) {
@@ -279,19 +266,19 @@ const styles = StyleSheet.create({
 
   currentChordRootText: {
     color: 'white',
-    fontSize: scaleFontSize(60),
+    fontSize: 80,
   },
   currentChordQualityText: {
     color: 'white',
-    fontSize: scaleFontSize(30),
+    fontSize: 40,
   },
   previewChordRootText: {
     color: 'white',
-    fontSize: scaleFontSize(40)
+    fontSize: 60
   },
   previewChordQualityText: {
     color: 'white',
-    fontSize: scaleFontSize(20)
+    fontSize: 30
   },
 
   shrinkBarContainer: {
