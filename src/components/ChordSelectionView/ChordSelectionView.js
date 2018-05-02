@@ -270,6 +270,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-end',
     alignItems: 'center',
+    marginTop: 7,
   },
   button: {
     alignItems: 'center',
