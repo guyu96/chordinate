@@ -76,9 +76,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#e6e6e6'
+    backgroundColor: '#f2f2f2'
   },
   countDownText: {
+    color: 'gray',
     fontSize: 60
   }
 });

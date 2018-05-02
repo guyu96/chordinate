@@ -13,17 +13,11 @@ export default class ChordPracticeView extends Component {
     super(props);
     this.state = {
       currentChord: 0,
-      shrinkBarStyles: {
-        backgroundColor: 'gray',
-        borderRadius: 1,
-        height: 8
-      },
-      shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
+      shrinkBarWidth: 0,
       practiceSpeed: this.props.navigation.state.params.elapseTime,
       startCountDown: false,
     };
     sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
-    //console.log(this.state.practiceSpeed);
   }
 
   componentDidMount() {
@@ -41,6 +35,10 @@ export default class ChordPracticeView extends Component {
   };
 
   startPracticeHandler = () => {
+    this.setState({
+      shrinkBarWidth: new Animated.Value(initShrinkBarWidth)
+    })
+
     Animated.timing(
       this.state.shrinkBarWidth,
       {
@@ -52,14 +50,12 @@ export default class ChordPracticeView extends Component {
         this.setState((prevState) => {
           return {
             currentChord: prevState.currentChord + 1,
-            shrinkBarWidth: new Animated.Value(initShrinkBarWidth)
           }
         });
         this.startPracticeHandler();  // recur for next chord
       } else {  // end of practice sequence
         this.setState({
           currentChord: 0,
-          shrinkBarWidth: new Animated.Value(initShrinkBarWidth)
         });
       }
     });
@@ -103,7 +99,7 @@ export default class ChordPracticeView extends Component {
         </View>
         <Animated.View
           style={{
-            ...this.state.shrinkBarStyles,
+            ...shrinkBarStyle,
             width: this.state.shrinkBarWidth,
           }}
         >
@@ -113,9 +109,15 @@ export default class ChordPracticeView extends Component {
   }
 };
 
+const shrinkBarStyle = {
+  backgroundColor: 'gray',
+  borderRadius: 1,
+  height: 8
+}
+
 const previewChordStyle = {
-  width: 150,
-  height: 150,
+  width: '27%',
+  aspectRatio: 1,
   borderRadius: 10,
   backgroundColor: 'grey',
   alignItems: 'center',
@@ -138,8 +140,8 @@ const styles = StyleSheet.create({
   },
 
   currentChord: {
-    width: 250,
-    height: 250,
+    width: '37%',
+    aspectRatio: 1,
     borderRadius: 20,
     backgroundColor: 'grey',
     margin: 10,
