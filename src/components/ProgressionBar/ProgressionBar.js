@@ -14,7 +14,10 @@ export default class ProgressionBar extends Component {
   _renderRow = ({data, active}) => <ChordTile data={data} active={active} />
 
   chordOrderChangeHandler = (newSeq) => {
-    this.props.mostRecentChordSequence(newSeq);
+    let numberSeq = newSeq.map((val) => {
+      return parseInt(val, 10); // convert from string to number
+    });
+    this.props.mostRecentChordSequence(numberSeq);
   };
 
   render() {
