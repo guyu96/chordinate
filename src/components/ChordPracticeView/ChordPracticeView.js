@@ -1,13 +1,40 @@
 import React, { Component } from 'react';
 import Orientation from 'react-native-orientation';
 
-import { Switch, View, Text, TextInput, Button, Animated, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Switch,
+  View,
+  Text,
+  TextInput,
+  Button,
+  Animated,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+
 import CountDownTimer from 'chordinate/src/components/CountDownTimer/CountDownTimer';
+import BPMSlider from 'chordinate/src/components/BPMSlider/BPMSlider';
 
 const initShrinkBarWidth = 500;
 const defaultRepeat = 1;
 const numberReg = /^\+?\d+$/;
 const bpmIncreaseStep = 30;
+const minBPM = 30;
+const maxBPM = 240;
+const defaultBPM = 100;
+
+/*
+  font scaling reference: https://stackoverflow.com/a/49532212
+*/
+SCREEN_WIDTH = Dimensions.get('window').width; // get current width
+SCALE = 375; // constant, 375 is standard width of iphone 6 / 7 / 8
+
+const scaleFontSize = (fontSize) => {
+  const ratio = fontSize / SCALE; // get ratio based on your standard scale
+  const newSize = Math.round(ratio * SCREEN_WIDTH);
+  return newSize;
+}
 
 export default class ChordPracticeView extends Component {
   constructor(props) {
@@ -15,8 +42,9 @@ export default class ChordPracticeView extends Component {
     this.state = {
       currentChord: 0,
       shrinkBarWidth: 0,
-      bpm: this.props.navigation.state.params.bpm,
-      practiceSpeed: ChordPracticeView.bpmToSpeed(this.props.navigation.state.params.bpm),
+      bpm: defaultBPM,
+      challengeBPM: defaultBPM,
+      practiceSpeed: ChordPracticeView.bpmToSpeed(defaultBPM),
       startCountDown: false,
       challengeMode: false,
       totalRepeats: defaultRepeat,
@@ -33,6 +61,13 @@ export default class ChordPracticeView extends Component {
   static bpmToSpeed = (bpm) => {
     return 60000.0 / bpm;
   };
+
+  BPMUpdateHandler = (newBPM) => {
+    this.setState({
+      bpm: newBPM,
+      practiceSpeed: ChordPracticeView.bpmToSpeed(newBPM),
+    });
+  }
 
   setCountDown = (val) => {
     this.setState({
@@ -60,7 +95,7 @@ export default class ChordPracticeView extends Component {
     });
   }
 
-  updateBPM = (prevBPM) => {
+  updateChallengeBPM = (prevBPM) => {
     return this.state.challengeMode? prevBPM + bpmIncreaseStep : prevBPM;
   };
 
@@ -89,21 +124,23 @@ export default class ChordPracticeView extends Component {
         let moreRepeats = this.state.repeated < this.state.totalRepeats - 1;
         this.setState((prevState) => {
           let newRepeated =  moreRepeats? prevState.repeated + 1 : this.state.totalRepeats;
-          let newBPM = this.updateBPM(this.state.bpm);
+          let newBPM = this.updateChallengeBPM(this.state.bpm);
           return {
             currentChord: 0,
             repeated: newRepeated,
-            bpm: newBPM,
+            challengeBPM: newBPM,
             practiceSpeed: ChordPracticeView.bpmToSpeed(newBPM),
           }
         });
         if (moreRepeats) {
           this.startPracticeHandler();  // recur for next practice cycle
         } else {  // end of all practice cycles
-          this.setState({
-            disablePracticeButton: false,
-            bpm: this.props.navigation.state.params.bpm,
-            practiceSpeed: ChordPracticeView.bpmToSpeed(this.props.navigation.state.params.bpm),
+          this.setState((prevState) => {
+            return {
+              disablePracticeButton: false,
+              challengeBPM: prevState.bpm,
+              practiceSpeed: ChordPracticeView.bpmToSpeed(prevState.bpm),
+            }
           });
         }
       }
@@ -126,28 +163,35 @@ export default class ChordPracticeView extends Component {
           : null
         }
         <View style={styles.controlContainer}>
+          <View style={styles.bpmContainer}>
+            <BPMSlider
+              bpm={this.state.bpm}
+              minBPM={minBPM}
+              maxBPM={maxBPM}
+              BPMHandler={this.BPMUpdateHandler}
+            />
+          </View>
           <View style={styles.challengeContainer}>
-            <Text style={styles.challengeModeText}>Challenge Mode</Text>
+            <Text style={styles.challengeModeText}>Challenge</Text>
             <Switch
               onValueChange={(val) => this.toggleChallengeMode(val)}
               value={this.state.challengeMode}
             />
           </View>
           <View style={styles.repeatTextView}>
-            <Text style={styles.text}>repeat </Text>
+            <Text style={styles.text}>Repeat </Text>
             <TextInput
               style={styles.repeatTextInput}
               placeholder='1'
               onSubmitEditing={(event) => this.updateRepeat(event.nativeEvent.text)}
             />
-            <Text style={styles.text}> times</Text>
           </View>
           <TouchableOpacity
             disabled={this.state.disablePracticeButton}
             onPress={() => this.setCountDown(true)}
             style={styles.button}
           >
-            <Text style={styles.text}>Start Practice</Text>
+            <Text style={styles.text}>Start</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.slideShowView}>
@@ -225,12 +269,12 @@ const styles = StyleSheet.create({
 
   currentChordText: {
     color: 'white',
-    fontSize: 90
+    fontSize: scaleFontSize(45),
   },
 
   previewChordText: {
     color: 'white',
-    fontSize: 50
+    fontSize: scaleFontSize(30)
   },
 
   shrinkBarContainer: {
@@ -241,44 +285,51 @@ const styles = StyleSheet.create({
 
   controlContainer: {
     flex: 1,
+    width: '100%',
     flexDirection: 'row',
     alignSelf: 'center',
     alignItems: 'center',
-    justifyContent: "center"
+    justifyContent: "space-around",
+    marginBottom: 15,
+    backgroundColor: '#e6e6e6',
+  },
+
+  bpmContainer: {
+    width: '32%',
   },
 
   challengeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '30%',
+    width: '25%',
   },
 
 	challengeModeText: {
+    fontSize: scaleFontSize(12),
     marginRight: 5,
   },
 
   repeatTextView: {
-    width: '30%',
-    marginLeft: 10,
-    marginRight: 10,
+    width: '20%',
     flexDirection: 'row',
     alignItems: 'center',
   },
 
   text: {
-    fontSize: 18,
+    fontSize: scaleFontSize(12),
   },
 
   repeatTextInput: {
     width: '15%',
-    fontSize: 18,
+    fontSize: scaleFontSize(12),
   },
 
   button: {
+    width: '13%',
     alignItems: 'center',
-    backgroundColor: '#DDDDDD',
+    borderRadius: 5,
+    backgroundColor: '#cccccc',
     padding: 8,
-    margin: 5,
   },
 
 });
