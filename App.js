@@ -4,19 +4,21 @@ import { StackNavigator } from 'react-navigation';
 
 import ChordSelectionView from './src/components/ChordSelectionView/ChordSelectionView';
 import ChordPracticeView from './src/components/ChordPracticeView/ChordPracticeView';
+import ProgressionListView from 'chordinate/src/components/ProgressionListView/ProgressionListView'
 
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chordPracticeSequence: ["A maj", "C m", "F 7"]
+      chordProgressionsList: []
     };
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <ChordSelectionView/>
+        <ProgressionListView/>
+        {/*<ChordSelectionView/>*/}
       </View>
     );
   }
@@ -38,7 +40,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-  }
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 8,
+    margin: 5
+  },
+  buttonText: {
+    fontSize: 17
+  },
 });
 
 export default class App extends React.Component{

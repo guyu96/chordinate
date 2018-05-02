@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button, TouchableOpacity, Switch, StyleSheet} from 'react-native';
+import { Text, View, Button, TouchableOpacity, Switch, StyleSheet, TextInput, AsyncStorage} from 'react-native';
 import Orientation from 'react-native-orientation';
 import { withNavigation } from 'react-navigation';
 
@@ -31,6 +31,7 @@ class ChordSelectionView extends Component {
       disableAddButton: true,
       disableRemoveButton: true,
       gameMode: false,
+      sequenceName: ''
     };
   }
 
@@ -144,11 +145,18 @@ class ChordSelectionView extends Component {
     });
   }
 
-  chordPracticeHandler = () => {
+  // save the sequence with its name as its key, and then go into practice mode
+  chordPracticeHandler = async() => {
     if (this.state.chordSequenceIndices.length == 0) {
       alert("Please select a valid chord sequence to practice.");
       return;
     }
+    if (!this.state.sequenceName){
+      alert("Please give this chord sequence a valid name");
+      return;
+    }
+    // store this progression's state
+    AsyncStorage.setItem(this.state.sequenceName, JSON.stringify(this.state));
     this.props.navigation.navigate('Practice', {
       chordPracticeSequence: this.getChordArrayForRender(),
       elapseTime: 60000.0 / this.state.bpm, // 60,000 ms
@@ -176,6 +184,11 @@ class ChordSelectionView extends Component {
               chordChangeHandler={this.chordChangeHandler}
               activeRoot={this.state.chordProgression[this.state.activeKey].root}
               activeQuality={this.state.chordProgression[this.state.activeKey].quality}
+            />
+            <TextInput
+              style={{height: 40, width: 120}}
+              placeholder="Sequence Name"
+              onChangeText={(inputName) => this.setState({sequenceName: inputName})}
             />
           </View>
 
