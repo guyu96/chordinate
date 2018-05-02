@@ -21,7 +21,6 @@ export default class ChordPracticeView extends Component {
       shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
       practiceSpeed: this.props.navigation.state.params.elapseTime,
       startCountDown: false,
-      startPractice: false,
     };
     sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
     //console.log(this.state.practiceSpeed);
@@ -33,8 +32,12 @@ export default class ChordPracticeView extends Component {
 
   setCountDown = (val) => {
     this.setState({
-      startCountDown: val
+      startCountDown: val,
     });
+    // if count down has finished, start practice
+    if (val === false) {
+      this.startPracticeHandler();
+    }
   };
 
   startPracticeHandler = () => {

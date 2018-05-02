@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, View, Text } from 'react-native';
+import { Modal, View, Text, StyleSheet } from 'react-native';
 
 const defaultCountDownStep = 1000;  // 1 sec
 const countTimes = 3;
@@ -53,13 +53,14 @@ class CountDownTimer extends Component {
   render() {
     return (
       <Modal
-        animationType={"fade"}
-        transparent={false}
+        animationType={'fade'}
+        transparent={true}
         visible={this.state.modalVisible}
         supportedOrientations={['portrait', 'landscape']}
+        presentationStyle={'overFullScreen'}
       >
-      <View>
-        <Text>
+      <View style={styles.modalView}>
+        <Text style={styles.countDownText}>
           {this.state.countDownVal}
         </Text>
       </View>
@@ -67,5 +68,19 @@ class CountDownTimer extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  modalView: {
+    width: '100%',
+    height: '100%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#e6e6e6'
+  },
+  countDownText: {
+    fontSize: 60
+  }
+});
 
 export default CountDownTimer;
