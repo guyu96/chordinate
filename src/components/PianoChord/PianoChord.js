@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Rect } from 'react-native-svg';
-import { getChordNotes } from '../../chord'
+import { getChordNotes } from 'chordinate/src/chord';
 
 const styles = {
   height: 1100,

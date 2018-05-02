@@ -3,11 +3,11 @@ import { Text, View, Button, TouchableOpacity, Switch, StyleSheet} from 'react-n
 import Orientation from 'react-native-orientation';
 import { withNavigation } from 'react-navigation';
 
-import { getChordNotes } from '../../chord.js';
-import PickerView from '../PickerView/PickerView';
-import PianoChord from '../PianoChord/PianoChord';
-import ProgressionBar from '../ProgressionBar/ProgressionBar';
-import BPMSlider from '../BPMSlider/BPMSlider';
+import { getChordNotes } from 'chordinate/src/chord.js';
+import PickerView from 'chordinate/src/components/PickerView/PickerView';
+import PianoChord from 'chordinate/src/components/PianoChord/PianoChord';
+import ProgressionBar from 'chordinate/src/components/ProgressionBar/ProgressionBar';
+import BPMSlider from 'chordinate/src/components/BPMSlider/BPMSlider';
 
 const minBPM = 30;
 const maxBPM = 240;

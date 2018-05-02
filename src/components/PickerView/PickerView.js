@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import ChordPicker from '../ChordPicker/ChordPicker';
-import { noteNames, qualityNames } from '../../chord';
+import ChordPicker from 'chordinate/src/components/ChordPicker/ChordPicker';
+import { noteNames, qualityNames } from 'chordinate/src/chord';
 
 export default class PickerView extends Component {
   constructor(props) {
