@@ -133,17 +133,21 @@ export default class ChordPracticeView extends Component {
               value={this.state.challengeMode}
             />
           </View>
-          <TextInput
-            style={styles.repeatText}
-            placeholder="Repeat times"
-            onSubmitEditing={(event) => this.updateRepeat(event.nativeEvent.text)}
-          />
+          <View style={styles.repeatTextView}>
+            <Text style={styles.text}>repeat </Text>
+            <TextInput
+              style={styles.repeatTextInput}
+              placeholder='1'
+              onSubmitEditing={(event) => this.updateRepeat(event.nativeEvent.text)}
+            />
+            <Text style={styles.text}> times</Text>
+          </View>
           <TouchableOpacity
             disabled={this.state.disablePracticeButton}
             onPress={() => this.setCountDown(true)}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>Start Practice</Text>
+            <Text style={styles.text}>Start Practice</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.slideShowView}>
@@ -253,10 +257,20 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
 
-  repeatText: {
+  repeatTextView: {
+    width: '30%',
     marginLeft: 10,
     marginRight: 10,
-    width: '30%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  text: {
+    fontSize: 18,
+  },
+
+  repeatTextInput: {
+    width: '15%',
     fontSize: 18,
   },
 
@@ -264,7 +278,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
     padding: 8,
-    margin: 5
+    margin: 5,
   },
 
 });
