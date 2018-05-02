@@ -20,18 +20,16 @@ const BPMSlider = (props) => {
 const styles = StyleSheet.create({
 	container: {
 		width: '90%',
-		margin: 10,
+		margin: 15,
 		flexDirection: 'row',
-    alignItems: "stretch",
-    justifyContent: "center"
+		alignItems: "center",
+		justifyContent: "center"
 	},
 	slider: {
 		width: '70%',
-		marginRight: 5,
 	},
 	bpmText: {
 		width: '30%',
-		alignSelf: 'center'
 	}
 });
 
