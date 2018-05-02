@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Orientation from 'react-native-orientation';
 
 import { StyleSheet, View, Text, Button, Animated } from 'react-native';
+import CountDownTimer from 'chordinate/src/components/CountDownTimer/CountDownTimer';
 
 const initShrinkBarWidth = 500;
 var sequenceLength;
@@ -18,7 +19,9 @@ export default class ChordPracticeView extends Component {
         height: 8
       },
       shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
-      practiceSpeed: this.props.navigation.state.params.elapseTime
+      practiceSpeed: this.props.navigation.state.params.elapseTime,
+      startCountDown: false,
+      startPractice: false,
     };
     sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
     //console.log(this.state.practiceSpeed);
@@ -28,6 +31,12 @@ export default class ChordPracticeView extends Component {
     Orientation.lockToLandscape();
   }
 
+  setCountDown = (val) => {
+    this.setState({
+      startCountDown: val
+    });
+  };
+
   startPracticeHandler = () => {
     Animated.timing(
       this.state.shrinkBarWidth,
@@ -36,14 +45,14 @@ export default class ChordPracticeView extends Component {
         duration: this.state.practiceSpeed,
       }
     ).start(() => {
-      this.setState((prevState) => {
-        return {
-          currentChord: prevState.currentChord + 1,
-          shrinkBarWidth: new Animated.Value(initShrinkBarWidth)
-        }
-      });
-      if (this.state.currentChord < sequenceLength) {
-        this.startPracticeHandler();
+      if (this.state.currentChord < sequenceLength - 1) {
+        this.setState((prevState) => {
+          return {
+            currentChord: prevState.currentChord + 1,
+            shrinkBarWidth: new Animated.Value(initShrinkBarWidth)
+          }
+        });
+        this.startPracticeHandler();  // recur for next chord
       } else {  // end of practice sequence
         this.setState({
           currentChord: 0,
@@ -61,8 +70,15 @@ export default class ChordPracticeView extends Component {
 
     return (
       <View style={styles.outerContainer}>
+        { this.state.startCountDown?
+          <CountDownTimer
+            reStart={this.state.startCountDown}
+            setCountDown={this.setCountDown}
+          />
+          : null
+        }
         <Button
-          onPress={this.startPracticeHandler}
+          onPress={() => this.setCountDown(true)}
           title='Start Practice'
         />
         <View style={styles.slideShowView}>
