@@ -149,9 +149,9 @@ export default class ChordPracticeView extends Component {
 
   render() {
     let hasPrevChord = this.state.currentChord > 0;
-    let prevChordText = hasPrevChord? this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord - 1] : '';
+    let prevChord = hasPrevChord? this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord - 1] : null;
     let hasNextChord = this.state.currentChord < this.sequenceLength - 1;
-    let nextChordText = hasNextChord? this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord + 1] : '';
+    let nextChord = hasNextChord? this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord + 1] : null;
 
     return (
       <View style={styles.outerContainer}>
@@ -196,18 +196,27 @@ export default class ChordPracticeView extends Component {
         </View>
         <View style={styles.slideShowView}>
           <View style={{ ...previewChordStyle, opacity: hasPrevChord? 0.8: 0 }}>
-            <Text style={styles.previewChordText}>
-              {prevChordText}
+            <Text style={styles.previewChordRootText}>
+              { prevChord? prevChord.root : '' }
+            </Text>
+            <Text style={styles.previewChordQualityText}>
+              { prevChord? prevChord.quality : '' }
             </Text>
           </View>
           <View style={styles.currentChord}>
-            <Text style={styles.currentChordText}>
-              {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord]}
+            <Text style={styles.currentChordRootText}>
+              {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord].root}
+            </Text>
+            <Text style={styles.currentChordQualityText}>
+              {this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord].quality}
             </Text>
           </View>
           <View style={{ ...previewChordStyle, opacity: hasNextChord? 0.8: 0 }}>
-            <Text style={styles.previewChordText}>
-              {nextChordText}
+            <Text style={styles.previewChordRootText}>
+              { nextChord? nextChord.root : '' }
+            </Text>
+            <Text style={styles.previewChordQualityText}>
+              { nextChord? nextChord.quality : '' }
             </Text>
           </View>
         </View>
@@ -263,18 +272,26 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'grey',
     margin: 10,
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  currentChordText: {
+  currentChordRootText: {
     color: 'white',
-    fontSize: scaleFontSize(45),
+    fontSize: scaleFontSize(60),
   },
-
-  previewChordText: {
+  currentChordQualityText: {
     color: 'white',
-    fontSize: scaleFontSize(30)
+    fontSize: scaleFontSize(30),
+  },
+  previewChordRootText: {
+    color: 'white',
+    fontSize: scaleFontSize(40)
+  },
+  previewChordQualityText: {
+    color: 'white',
+    fontSize: scaleFontSize(20)
   },
 
   shrinkBarContainer: {

@@ -47,7 +47,10 @@ class ChordSelectionView extends Component {
       return indexVal !== this.state.placeholderKey;
     })
     .map((indexVal) => {
-      return `${this.state.chordProgression[indexVal].root} ${this.state.chordProgression[indexVal].quality}`;
+      return {
+        root: `${this.state.chordProgression[indexVal].root}`,
+        quality: `${this.state.chordProgression[indexVal].quality}`
+      }
     });
   };
 
