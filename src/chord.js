@@ -2,16 +2,16 @@ const NUM_NOTES = 12;
 const NOTES = {
   '' : -1,
   'C' : 0,
-  'C# / Db' : 1,
+  'Db' : 1,
   'D' : 2,
-  'D# / Eb' : 3,
+  'Eb' : 3,
   'E' : 4,
   'F' : 5,
-  'F# / Gb' : 6,
+  'Gb' : 6,
   'G' : 7,
-  'G# / Ab' : 8,
+  'Ab' : 8,
   'A' : 9,
-  'A# / Bb' : 10,
+  'Bb' : 10,
   'B' : 11
 };
 
@@ -31,7 +31,7 @@ const QUALITIES = {
 };
 
 // use an array to enforce order
-export const noteNames = ['', 'C', 'C# / Db', 'D', 'D# / Eb', 'E', 'F', 'F# / Gb', 'G', 'G# / Ab', 'A', 'A# / Bb', 'B'];
+export const noteNames = ['', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 export const qualityNames = ['', 'maj', 'm', 'aug', 'dim', '7', 'maj7', 'm7', 'mM7', 'm7b5', 'aug7', 'dim7'];
 
 export const getChordNotes = (rootName, qualityName) => {
