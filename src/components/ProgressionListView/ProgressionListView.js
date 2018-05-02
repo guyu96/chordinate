@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {StyleSheet, Text, View, Button, TouchableOpacity, FlatList, AsyncStorage} from 'react-native';
 import Orientation from 'react-native-orientation';
 import {withNavigation} from "react-navigation";
+import ProgressionListItem from 'chordinate/src/components/ProgressionListItem/ProgressionListItem';
+
 
 
 class ProgressionListView extends Component{
@@ -41,7 +43,7 @@ class ProgressionListView extends Component{
       <View>
       <FlatList
         data={this.state.progressionNamesList}
-        renderItem={({item}) => <Text>{item}</Text>}
+        renderItem={({item, index}) => <ProgressionListItem progressionName={item} index={index}/>}
       />
       {/*<Text>OMG</Text>*/}
       {/*<Text>{this.state.progressionNamesList}</Text>*/}
