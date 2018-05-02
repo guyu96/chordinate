@@ -16,7 +16,7 @@ import {
 import CountDownTimer from 'chordinate/src/components/CountDownTimer/CountDownTimer';
 import BPMSlider from 'chordinate/src/components/BPMSlider/BPMSlider';
 
-const initShrinkBarWidth = 500;
+const initShrinkBarWidth = 600;
 const defaultRepeat = 1;
 const numberReg = /^\+?\d+$/;
 const bpmIncreaseStep = 30;
@@ -100,7 +100,7 @@ export default class ChordPracticeView extends Component {
   };
 
   startPracticeHandler = () => {
-    console.log(this.state.bpm + " " + this.state.practiceSpeed);
+    //console.log(this.state.bpm + " " + this.state.practiceSpeed);
     this.setState({
       shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
       disablePracticeButton: true
@@ -291,17 +291,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: "space-around",
     marginBottom: 15,
+    padding: 3,
     backgroundColor: '#e6e6e6',
   },
 
   bpmContainer: {
-    width: '32%',
+    flex: 2,
   },
 
   challengeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '25%',
+    flex: 2,
   },
 
 	challengeModeText: {
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
   },
 
   repeatTextView: {
-    width: '20%',
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
   },
 
   repeatTextInput: {
-    width: '15%',
+    flex: 1,
     fontSize: scaleFontSize(12),
   },
 
