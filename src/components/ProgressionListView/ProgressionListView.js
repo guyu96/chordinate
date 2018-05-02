@@ -23,12 +23,19 @@ class ProgressionListView extends Component{
   _loadInitialState = async () =>{
       try {
         let value = await AsyncStorage.getAllKeys();
-        this.setState({progressionNamesList: value, loaded:true});
-
+        if(value){
+          this.setState({progressionNamesList: value, loaded:true});
+        } else{
+          this.setState({progressionNamesList: ["Error", "Loading", "List"], loaded:true});
+        }
       }
        catch(error){
         this.setState({progressionNamesList:["Error"], loaded:true});
       }
+  };
+
+  _renderItem = (item) =>{
+
   };
 
 
@@ -40,13 +47,14 @@ class ProgressionListView extends Component{
 
     }
     return(
-      <View>
+      <View style={{flex:1}}>
       <FlatList
         data={this.state.progressionNamesList}
-        renderItem={({item, index}) => <ProgressionListItem progressionName={item} index={index}/>}
+        renderItem={({item}) => <ProgressionListItem text={item} index={this.state.progressionNamesList.indexOf(item)}/>}
+         /*={(item, index) => {<Text>{item}</Text>}}*/
       />
       {/*<Text>OMG</Text>*/}
-      {/*<Text>{this.state.progressionNamesList}</Text>*/}
+      <Text>{this.state.progressionNamesList}</Text>
       </View>
     )
   }
