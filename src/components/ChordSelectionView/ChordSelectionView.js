@@ -186,20 +186,20 @@ class ChordSelectionView extends Component {
                 onPress={this.chordAddHandler}
                 style={styles.button}
               >
-                <Text>Add Chord</Text>
+                <Text style={styles.buttonText}>Add Chord</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 disabled={this.state.disableRemoveButton}
                 onPress={this.chordRemoveHandler}
                 style={styles.button}
               >
-                <Text>Remove Chord</Text>
+                <Text style={styles.buttonText}>Remove Chord</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={this.chordPracticeHandler}
                 style={styles.button}
               >
-                <Text>Practice</Text>
+                <Text style={styles.buttonText}>Practice</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.gameModeContainer}>
@@ -214,7 +214,6 @@ class ChordSelectionView extends Component {
               <PianoChord
                 rootName={this.state.chordProgression[this.state.activeKey].root}
                 qualityName={this.state.chordProgression[this.state.activeKey].quality}
-                style={styles.pianoChord}
               />
             </View>
 
@@ -278,19 +277,19 @@ const styles = StyleSheet.create({
     padding: 8,
     margin: 5
   },
+  buttonText: {
+    fontSize: 17
+  },
 
   gameModeContainer: {
     flex: 1,
     flexDirection: 'row',
     alignSelf: 'flex-end',
-    alignItems: "stretch",
+    alignItems: 'center',
     justifyContent: "center"
   },
-  gameModeSwitch: {
-    alignSelf: 'center',
-  },
 	gameModeText: {
-		alignSelf: 'center'
+    marginRight: 5,
   },
 
   pianoChordContainer: {
