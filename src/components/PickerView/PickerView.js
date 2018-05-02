@@ -90,9 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     height: "100%",
-    maxWidth: 250,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
-  },
+  }
 });

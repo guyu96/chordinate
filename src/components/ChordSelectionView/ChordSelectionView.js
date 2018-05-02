@@ -158,11 +158,11 @@ class ChordSelectionView extends Component {
   // save the sequence with its name as its key, and then go into practice mode
   chordPracticeHandler = async() => {
     if (this.state.chordSequenceIndices.length == 0) {
-      alert("Please select a valid chord sequence to practice.");
+      alert('Please select a valid chord sequence to practice.');
       return;
     }
     if (!this.state.sequenceName){
-      alert("Please give this chord sequence a valid name");
+      alert('Please give this chord sequence a valid name');
       return;
     }
     // store this progression's state
@@ -176,61 +176,59 @@ class ChordSelectionView extends Component {
   render() {
     return (
       <View style={styles.chordSelectionView}>
-        <View style={styles.outerContainer}>
-          <View style={styles.innerLeftContainer}>
+        <View style={styles.topContainer}>
+          <View style={styles.topLeftContainer}>
+            <TextInput
+              style={styles.progressionNameInput}
+              placeholder='Chord Progression Name'
+              onChangeText={ (input) => { this.setState({ sequenceName: input }); } }
+            />
+          </View>
+          <View style={styles.topRightContainer}>
+            <TouchableOpacity
+              disabled={this.state.disableAddButton}
+              onPress={this.chordAddHandler}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Add Chord</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              disabled={this.state.disableRemoveButton}
+              onPress={this.chordRemoveHandler}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Remove Chord</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={this.chordPracticeHandler}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Practice</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.midContainer}>
+          <View style={styles.midLeftContainer}>
             <BPMSlider
-                bpm={this.state.bpm}
-                minBPM={minBPM}
-                maxBPM={maxBPM}
-                BPMHandler={this.BPMUpdateHandler}
+              bpm={this.state.bpm}
+              minBPM={minBPM}
+              maxBPM={maxBPM}
+              BPMHandler={this.BPMUpdateHandler}
             />
             <PickerView
               chordChangeHandler={this.chordChangeHandler}
               activeRoot={this.state.chordProgression[this.state.activeKey].root}
               activeQuality={this.state.chordProgression[this.state.activeKey].quality}
             />
-            <TextInput
-              style={{height: 40, width: 120}}
-              placeholder="Sequence Name"
-              onChangeText={(inputName) => this.setState({sequenceName: inputName})}
+          </View>
+          <View style={styles.midRightContainer}>
+            <PianoChord
+              rootName={this.state.chordProgression[this.state.activeKey].root}
+              qualityName={this.state.chordProgression[this.state.activeKey].quality}
             />
           </View>
-
-          <View style={styles.innerRightContainer}>
-            <View style={styles.buttons}>
-              <TouchableOpacity
-                disabled={this.state.disableAddButton}
-                onPress={this.chordAddHandler}
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>Add Chord</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={this.state.disableRemoveButton}
-                onPress={this.chordRemoveHandler}
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>Remove Chord</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={this.chordPracticeHandler}
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>Practice</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.pianoChordContainer}>
-              <PianoChord
-                rootName={this.state.chordProgression[this.state.activeKey].root}
-                qualityName={this.state.chordProgression[this.state.activeKey].quality}
-              />
-            </View>
-
-          </View>
         </View>
-
-        <View style={styles.progressionBarContainer}>
+        <View style={styles.bottomContainer}>
           <ProgressionBar
             progression={this.state.chordProgression}
             selectHandler={this.chordSelectHandler}
@@ -251,56 +249,54 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  outerContainer: {
-    flex: 5,
-    width: '100%',
+  topContainer: {
+    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  innerLeftContainer: {
-    width: '45%',
-    height: '100%',
-    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+    topLeftContainer: {
+      flex: 2
+    },
+      progressionNameInput: {
+        height: '100%',
+        width: '100%'
+      },
+    topRightContainer: {
+      flex: 3,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    },
+      button: {
+        flex: 1,
+        backgroundColor: '#ddd',
+        padding: 8,
+        margin: 5
+      },
+        buttonText: {
+          fontSize: 14,
+          textAlign: 'center'
+        },
 
-  innerRightContainer: {
-    width: '55%',
-    height: '100%',
-    paddingRight: 20,
-    flexDirection: 'column',
+  midContainer: {
+    flex: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
+    midLeftContainer: {
+      flex: 2
+    },
+    midRightContainer: {
+      flex: 3,
+    },
 
-  buttons: {
-    flex: 1,
-    flexDirection: 'row',
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    marginTop: 7,
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 8,
-    margin: 5
-  },
-  buttonText: {
-    fontSize: 17
-  },
-
-  pianoChordContainer: {
-    flex: 3
-  },
-
-  progressionBarContainer: {
+  bottomContainer: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#e6e6e6',
-  },
+    height: '100%'
+  }
 });
 
 export default withNavigation(ChordSelectionView);

@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
 
   list: {
     height: '100%',
-    backgroundColor: '#e6e6e6',
-    width: window.width
+    width: '100%',
+    backgroundColor: '#e6e6e6'
   },
 
   chordTile: chordTileStyle,
