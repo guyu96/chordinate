@@ -7,11 +7,6 @@ import { getChordNotes } from 'chordinate/src/chord.js';
 import PickerView from 'chordinate/src/components/PickerView/PickerView';
 import PianoChord from 'chordinate/src/components/PianoChord/PianoChord';
 import ProgressionBar from 'chordinate/src/components/ProgressionBar/ProgressionBar';
-import BPMSlider from 'chordinate/src/components/BPMSlider/BPMSlider';
-
-const minBPM = 30;
-const maxBPM = 240;
-const defaultBPM = 100;
 
 class ChordSelectionView extends Component {
   constructor(props) {
@@ -33,7 +28,6 @@ class ChordSelectionView extends Component {
       placeholderKey: 0,
       nextChordKey: 1,
       chordSequenceIndices: [],
-      bpm: defaultBPM,
       disableAddButton: true,
       disableRemoveButton: true,
       sequenceName: ''
@@ -42,12 +36,6 @@ class ChordSelectionView extends Component {
 
   componentDidMount() {
     Orientation.lockToLandscape();
-  }
-
-  BPMUpdateHandler = (newBPM) => {
-    this.setState({
-      bpm: newBPM
-    });
   }
 
   // returns ana array of strings that represents the chords in the right order
@@ -168,8 +156,7 @@ class ChordSelectionView extends Component {
     // store this progression's state
     AsyncStorage.setItem(this.state.sequenceName, JSON.stringify(this.state));
     this.props.navigation.navigate('Practice', {
-      chordPracticeSequence: this.getChordArrayForRender(),
-      bpm: this.state.bpm,
+      chordPracticeSequence: this.getChordArrayForRender()
     })
   };
 
@@ -209,12 +196,6 @@ class ChordSelectionView extends Component {
         </View>
         <View style={styles.midContainer}>
           <View style={styles.midLeftContainer}>
-            <BPMSlider
-              bpm={this.state.bpm}
-              minBPM={minBPM}
-              maxBPM={maxBPM}
-              BPMHandler={this.BPMUpdateHandler}
-            />
             <PickerView
               chordChangeHandler={this.chordChangeHandler}
               activeRoot={this.state.chordProgression[this.state.activeKey].root}

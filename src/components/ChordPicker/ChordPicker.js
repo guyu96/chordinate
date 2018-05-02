@@ -34,8 +34,8 @@ class ChordPicker extends Component {
     return (
       <View>
         <Picker
-          style={styles.pickerStyle}
-          mode="dropdown"
+          style={{ width: this.props.width }}
+          mode='dialog'
           selectedValue={this.state.selectedItem}
           onValueChange={(itemValue, itemIndex) => this.itemSelectionHandler(itemIndex)}
           itemStyle={styles.pickerItemStyle}  // only works on iOS
@@ -54,11 +54,8 @@ class ChordPicker extends Component {
 }
 
 const styles = StyleSheet.create({
-  pickerStyle: {
-    width: 100,
-  },
   pickerItemStyle: {
-    fontSize: 25,
+    fontSize: 24,
   }
 });
 

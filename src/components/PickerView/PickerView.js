@@ -74,11 +74,13 @@ export default class PickerView extends Component {
           selectedIndex={this.state.rootSelected}
           selectionList={noteNames}
           onItemSelected={this.chordSelectHandler}
+          width={85}
         />
         <ChordPicker
           selectedIndex={this.state.qualitySelected}
           selectionList={qualityNames}
           onItemSelected={this.qualitySelectHandler}
+          width={110}
         />
       </View>
     );
@@ -88,9 +90,10 @@ export default class PickerView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
-    height: "100%",
+    flexDirection: 'row',
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   }
 });
