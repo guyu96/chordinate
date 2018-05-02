@@ -16,23 +16,28 @@ const defaultBPM = 100;
 class ChordSelectionView extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      chordProgression: {
-        0: {
-          root: '',
-          quality: '',
-          active: true
-        }
-      },
-      activeKey: 0,
-      nextChordKey: 1,
-      chordSequenceIndices: [],
-      bpm: defaultBPM,
-      disableAddButton: true,
-      disableRemoveButton: true,
-      gameMode: false,
-      sequenceName: ''
-    };
+    if(this.props.navigation.state.params){
+      this.state = JSON.parse(this.props.navigation.state.params);
+    }
+    else {
+      this.state = {
+        chordProgression: {
+          0: {
+            root: '',
+            quality: '',
+            active: true
+          }
+        },
+        activeKey: 0,
+        nextChordKey: 1,
+        chordSequenceIndices: [],
+        bpm: defaultBPM,
+        disableAddButton: true,
+        disableRemoveButton: true,
+        gameMode: false,
+        sequenceName: ''
+      };
+    }
   }
 
   componentDidMount() {
