@@ -24,6 +24,7 @@ class ProgressionListView extends Component{
       try {
         let value = await AsyncStorage.getAllKeys();
         if(value){
+          value.unshift("Add New Sequence");
           this.setState({progressionNamesList: value, loaded:true});
         } else{
           this.setState({progressionNamesList: ["Error", "Loading", "List"], loaded:true});
@@ -49,6 +50,7 @@ class ProgressionListView extends Component{
     return(
       <View style={{flex:1}}>
       <FlatList
+        style={{flex:1}}
         data={this.state.progressionNamesList}
         renderItem={({item}) => <ProgressionListItem text={item} index={this.state.progressionNamesList.indexOf(item)}/>}
          /*={(item, index) => {<Text>{item}</Text>}}*/

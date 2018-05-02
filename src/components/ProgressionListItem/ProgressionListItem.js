@@ -12,13 +12,35 @@ class ProgressionListItem extends React.Component{
     }
   }
 
+  _clickHandler = async() => {
+    if(this.state.itemName == "Add New Sequence"){
+      this.props.navigation.navigate('SelectionView');
+    }
+    else{
+      try{
+        let progressionData = await AsyncStorage.getItem(this.state.itemName);
+        if(progressionData){
+          this.props.navigation.navigate('SelectionView', progressionData);
+        }
+      } catch(error){
+        this.props.navigation.navigate('Practice');
+      }
+    }
+  }
+
   render(){
     return(
       <View style={{
         flex: 1,
         backgroundColor: this.state.index % 2 == 0? '#3f3f3f' : '#7d7d7d'
       }}>
-        <Text>{this.state.itemName}</Text>
+        <Button
+          style = {
+            {color: this.state.index % 2 == 0? '#3f3f3f' : '#7d7d7d'}
+          }
+          onPress={this._clickHandler}
+          title={this.state.itemName}
+        />
       </View>
     )
   }
@@ -32,4 +54,4 @@ class ProgressionListItem extends React.Component{
 //   }
 // });
 
-export default ProgressionListItem;
+export default withNavigation(ProgressionListItem);

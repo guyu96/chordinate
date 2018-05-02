@@ -27,7 +27,8 @@ class HomeScreen extends React.Component {
 const RootStack = StackNavigator(
   {
     Home : { screen: HomeScreen },
-    Practice : { screen: ChordPracticeView }
+    Practice : { screen: ChordPracticeView },
+    SelectionView : {screen: ChordSelectionView}
   } , {
     initialRouteName : 'Home',
     headerMode: 'none'
