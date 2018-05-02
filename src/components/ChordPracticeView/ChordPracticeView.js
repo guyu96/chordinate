@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Orientation from 'react-native-orientation';
 
-import { Switch, View, Text, TextInput, Button, Animated, StyleSheet } from 'react-native';
+import { Switch, View, Text, TextInput, Button, Animated, TouchableOpacity, StyleSheet } from 'react-native';
 import CountDownTimer from 'chordinate/src/components/CountDownTimer/CountDownTimer';
 
 const initShrinkBarWidth = 500;
@@ -19,6 +19,7 @@ export default class ChordPracticeView extends Component {
       challengeMode: false,
       totalRepeats: defaultRepeat,
       repeated: 0,
+      disablePracticeButton: false,
     };
     this.sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
   }
@@ -55,7 +56,8 @@ export default class ChordPracticeView extends Component {
 
   startPracticeHandler = () => {
     this.setState({
-      shrinkBarWidth: new Animated.Value(initShrinkBarWidth)
+      shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
+      disablePracticeButton: true
     })
 
     Animated.timing(
@@ -83,6 +85,10 @@ export default class ChordPracticeView extends Component {
         });
         if (moreRepeats) {
           this.startPracticeHandler();  // recur for next practice cycle
+        } else {  // end of all practice cycles
+          this.setState({
+            disablePracticeButton: false
+          });
         }
       }
     });
@@ -116,10 +122,13 @@ export default class ChordPracticeView extends Component {
             placeholder="Repeat times"
             onSubmitEditing={(event) => this.updateRepeat(event.nativeEvent.text)}
           />
-          <Button
+          <TouchableOpacity
+            disabled={this.state.disablePracticeButton}
             onPress={() => this.setCountDown(true)}
-            title='Start Practice'
-          />
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Start Practice</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.slideShowView}>
           <View style={{ ...previewChordStyle, opacity: hasPrevChord? 0.8: 0 }}>
@@ -233,6 +242,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     width: '30%',
     fontSize: 18,
+  },
+
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 8,
+    margin: 5
   },
 
 });
