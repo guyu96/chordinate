@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Orientation from 'react-native-orientation';
 
-import { StyleSheet, View, Text, Button, Animated } from 'react-native';
+import { Switch, View, Text, TextInput, Button, Animated, StyleSheet } from 'react-native';
 import CountDownTimer from 'chordinate/src/components/CountDownTimer/CountDownTimer';
 
 const initShrinkBarWidth = 500;
-var sequenceLength;
+const defaultRepeat = 1;
+const numberReg = /^\+?\d+$/;
 
 export default class ChordPracticeView extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -16,8 +16,11 @@ export default class ChordPracticeView extends Component {
       shrinkBarWidth: 0,
       practiceSpeed: this.props.navigation.state.params.elapseTime,
       startCountDown: false,
+      challengeMode: false,
+      totalRepeats: defaultRepeat,
+      repeated: 0,
     };
-    sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
+    this.sequenceLength = this.props.navigation.state.params.chordPracticeSequence.length;
   }
 
   componentDidMount() {
@@ -27,12 +30,28 @@ export default class ChordPracticeView extends Component {
   setCountDown = (val) => {
     this.setState({
       startCountDown: val,
+      repeated: 0
     });
     // if count down has finished, start practice
     if (val === false) {
       this.startPracticeHandler();
     }
   };
+
+  toggleChallengeMode = (toggle) => {
+    this.setState({
+      challengeMode: toggle
+    });
+  }
+
+  updateRepeat = (input) => {
+    if (numberReg.test(input) === false) {
+      alert("Please enter a valid, positive number");
+    }
+    this.setState({
+      totalRepeats: parseInt(input)
+    });
+  }
 
   startPracticeHandler = () => {
     this.setState({
@@ -46,7 +65,7 @@ export default class ChordPracticeView extends Component {
         duration: this.state.practiceSpeed,
       }
     ).start(() => {
-      if (this.state.currentChord < sequenceLength - 1) {
+      if (this.state.currentChord < this.sequenceLength - 1) {
         this.setState((prevState) => {
           return {
             currentChord: prevState.currentChord + 1,
@@ -54,9 +73,17 @@ export default class ChordPracticeView extends Component {
         });
         this.startPracticeHandler();  // recur for next chord
       } else {  // end of practice sequence
-        this.setState({
-          currentChord: 0,
+        let moreRepeats = this.state.repeated < this.state.totalRepeats - 1;
+        this.setState((prevState) => {
+          let newRepeated =  moreRepeats? prevState.repeated + 1 : this.state.totalRepeats;
+          return {
+            currentChord: 0,
+            repeated: newRepeated
+          }
         });
+        if (moreRepeats) {
+          this.startPracticeHandler();  // recur for next practice cycle
+        }
       }
     });
   };
@@ -64,7 +91,7 @@ export default class ChordPracticeView extends Component {
   render() {
     let hasPrevChord = this.state.currentChord > 0;
     let prevChordText = hasPrevChord? this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord - 1] : '';
-    let hasNextChord = this.state.currentChord < sequenceLength - 1;
+    let hasNextChord = this.state.currentChord < this.sequenceLength - 1;
     let nextChordText = hasNextChord? this.props.navigation.state.params.chordPracticeSequence[this.state.currentChord + 1] : '';
 
     return (
@@ -76,10 +103,24 @@ export default class ChordPracticeView extends Component {
           />
           : null
         }
-        <Button
-          onPress={() => this.setCountDown(true)}
-          title='Start Practice'
-        />
+        <View style={styles.controlContainer}>
+          <View style={styles.challengeContainer}>
+            <Text style={styles.challengeModeText}>Challenge Mode</Text>
+            <Switch
+              onValueChange={(val) => this.toggleChallengeMode(val)}
+              value={this.state.challengeMode}
+            />
+          </View>
+          <TextInput
+            style={styles.repeatText}
+            placeholder="Repeat times"
+            onSubmitEditing={(event) => this.updateRepeat(event.nativeEvent.text)}
+          />
+          <Button
+            onPress={() => this.setCountDown(true)}
+            title='Start Practice'
+          />
+        </View>
         <View style={styles.slideShowView}>
           <View style={{ ...previewChordStyle, opacity: hasPrevChord? 0.8: 0 }}>
             <Text style={styles.previewChordText}>
@@ -97,13 +138,15 @@ export default class ChordPracticeView extends Component {
             </Text>
           </View>
         </View>
-        <Animated.View
-          style={{
-            ...shrinkBarStyle,
-            width: this.state.shrinkBarWidth,
-          }}
-        >
-        </Animated.View>
+        <View style={styles.shrinkBarContainer}>
+          <Animated.View
+            style={{
+              ...shrinkBarStyle,
+              width: this.state.shrinkBarWidth,
+            }}
+          >
+          </Animated.View>
+        </View>
       </View>
     )
   }
@@ -134,6 +177,8 @@ const styles = StyleSheet.create({
   },
 
   slideShowView: {
+    flex: 4,
+    margin: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -157,5 +202,37 @@ const styles = StyleSheet.create({
   previewChordText: {
     color: 'white',
     fontSize: 50
-  }
+  },
+
+  shrinkBarContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  controlContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: "center"
+  },
+
+  challengeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '30%',
+  },
+
+	challengeModeText: {
+    marginRight: 5,
+  },
+
+  repeatText: {
+    marginLeft: 10,
+    marginRight: 10,
+    width: '30%',
+    fontSize: 18,
+  },
+
 });

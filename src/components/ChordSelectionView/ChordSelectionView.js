@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button, TouchableOpacity, Switch, StyleSheet, TextInput, AsyncStorage} from 'react-native';
+import { Text, View, Button, TouchableOpacity, StyleSheet, TextInput, AsyncStorage} from 'react-native';
 import Orientation from 'react-native-orientation';
 import { withNavigation } from 'react-navigation';
 
@@ -31,7 +31,6 @@ class ChordSelectionView extends Component {
       bpm: defaultBPM,
       disableAddButton: true,
       disableRemoveButton: true,
-      gameMode: false,
       sequenceName: ''
     };
   }
@@ -169,12 +168,6 @@ class ChordSelectionView extends Component {
     })
   };
 
-  toggleGameMode = (toggle) => {
-    this.setState({
-      gameMode: toggle
-    });
-  }
-
   render() {
     return (
       <View style={styles.chordSelectionView}>
@@ -220,13 +213,6 @@ class ChordSelectionView extends Component {
               >
                 <Text style={styles.buttonText}>Practice</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.gameModeContainer}>
-              <Text style={styles.gameModeText}>Game Mode</Text>
-              <Switch
-                onValueChange={(val) => this.toggleGameMode(val)}
-                value={this.state.gameMode}
-              />
             </View>
 
             <View style={styles.pianoChordContainer}>
@@ -299,17 +285,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17
-  },
-
-  gameModeContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    justifyContent: "center"
-  },
-	gameModeText: {
-    marginRight: 5,
   },
 
   pianoChordContainer: {
