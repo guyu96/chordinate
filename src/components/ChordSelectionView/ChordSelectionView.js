@@ -7,6 +7,7 @@ import { getChordNotes } from 'chordinate/src/chord.js';
 import PickerView from 'chordinate/src/components/PickerView/PickerView';
 import PianoChord from 'chordinate/src/components/PianoChord/PianoChord';
 import ProgressionBar from 'chordinate/src/components/ProgressionBar/ProgressionBar';
+import ProgressionNameInput from 'chordinate/src/components/ProgressionNameInput/ProgressionNameInput';
 
 class ChordSelectionView extends Component {
   constructor(props) {
@@ -165,10 +166,9 @@ class ChordSelectionView extends Component {
       <View style={styles.chordSelectionView}>
         <View style={styles.topContainer}>
           <View style={styles.topLeftContainer}>
-            <TextInput
-              style={styles.progressionNameInput}
-              placeholder='Chord Progression Name'
-              onChangeText={ (input) => { this.setState({ sequenceName: input }); } }
+            <ProgressionNameInput
+              name={this.state.sequenceName}
+              changeName={(name) => { this.setState({ sequenceName : name }); }}
             />
           </View>
           <View style={styles.topRightContainer}>
@@ -239,10 +239,6 @@ const styles = StyleSheet.create({
     topLeftContainer: {
       flex: 2
     },
-      progressionNameInput: {
-        height: '100%',
-        width: '100%'
-      },
     topRightContainer: {
       flex: 3,
       flexDirection: 'row',
