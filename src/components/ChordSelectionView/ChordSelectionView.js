@@ -16,6 +16,11 @@ const defaultBPM = 100;
 class ChordSelectionView extends Component {
   constructor(props) {
     super(props);
+
+    if (this.props.navigation.state.params) {
+      this.state = JSON.parse(this.props.navigation.state.params);
+      return;
+    }
     this.state = {
       chordProgression: {
         0: {
