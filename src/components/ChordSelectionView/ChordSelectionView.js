@@ -164,7 +164,7 @@ class ChordSelectionView extends Component {
     AsyncStorage.setItem(this.state.sequenceName, JSON.stringify(this.state));
     this.props.navigation.navigate('Practice', {
       chordPracticeSequence: this.getChordArrayForRender(),
-      elapseTime: 60000.0 / this.state.bpm, // 60,000 ms
+      bpm: this.state.bpm,
     })
   };
 

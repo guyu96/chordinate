@@ -7,6 +7,7 @@ import CountDownTimer from 'chordinate/src/components/CountDownTimer/CountDownTi
 const initShrinkBarWidth = 500;
 const defaultRepeat = 1;
 const numberReg = /^\+?\d+$/;
+const bpmIncreaseStep = 30;
 
 export default class ChordPracticeView extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ export default class ChordPracticeView extends Component {
     this.state = {
       currentChord: 0,
       shrinkBarWidth: 0,
-      practiceSpeed: this.props.navigation.state.params.elapseTime,
+      bpm: this.props.navigation.state.params.bpm,
+      practiceSpeed: ChordPracticeView.bpmToSpeed(this.props.navigation.state.params.bpm),
       startCountDown: false,
       challengeMode: false,
       totalRepeats: defaultRepeat,
@@ -27,6 +29,10 @@ export default class ChordPracticeView extends Component {
   componentDidMount() {
     Orientation.lockToLandscape();
   }
+
+  static bpmToSpeed = (bpm) => {
+    return 60000.0 / bpm;
+  };
 
   setCountDown = (val) => {
     this.setState({
@@ -54,7 +60,12 @@ export default class ChordPracticeView extends Component {
     });
   }
 
+  updateBPM = (prevBPM) => {
+    return this.state.challengeMode? prevBPM + bpmIncreaseStep : prevBPM;
+  };
+
   startPracticeHandler = () => {
+    console.log(this.state.bpm + " " + this.state.practiceSpeed);
     this.setState({
       shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
       disablePracticeButton: true
@@ -78,16 +89,21 @@ export default class ChordPracticeView extends Component {
         let moreRepeats = this.state.repeated < this.state.totalRepeats - 1;
         this.setState((prevState) => {
           let newRepeated =  moreRepeats? prevState.repeated + 1 : this.state.totalRepeats;
+          let newBPM = this.updateBPM(this.state.bpm);
           return {
             currentChord: 0,
-            repeated: newRepeated
+            repeated: newRepeated,
+            bpm: newBPM,
+            practiceSpeed: ChordPracticeView.bpmToSpeed(newBPM),
           }
         });
         if (moreRepeats) {
           this.startPracticeHandler();  // recur for next practice cycle
         } else {  // end of all practice cycles
           this.setState({
-            disablePracticeButton: false
+            disablePracticeButton: false,
+            bpm: this.props.navigation.state.params.bpm,
+            practiceSpeed: ChordPracticeView.bpmToSpeed(this.props.navigation.state.params.bpm),
           });
         }
       }
