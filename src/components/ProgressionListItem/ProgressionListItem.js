@@ -1,57 +1,67 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Button, TouchableOpacity, FlatList, AsyncStorage} from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, FlatList, AsyncStorage } from 'react-native';
 import Orientation from 'react-native-orientation';
-import {withNavigation} from "react-navigation";
+import { withNavigation } from "react-navigation";
 
 class ProgressionListItem extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      itemName: this.props.text,
-      index: this.props.index
-    }
+
+  _handleClick = () => {
+    this.props.navigation.navigate('SelectionView', this.props.progressionData);
   }
 
-  _clickHandler = async() => {
-    if(this.state.itemName == "Add New Sequence"){
-      this.props.navigation.navigate('SelectionView');
-    }
-    else{
-      try{
-        let progressionData = await AsyncStorage.getItem(this.state.itemName);
-        if(progressionData){
-          this.props.navigation.navigate('SelectionView', progressionData);
-        }
-      } catch(error){
-        this.props.navigation.navigate('Practice');
-      }
-    }
-  }
-
-  render(){
-    return(
-      <View style={{
-        flex: 1,
-        backgroundColor: this.state.index % 2 == 0? '#3f3f3f' : '#7d7d7d'
-      }}>
-        <Button
-          style = {
-            {color: this.state.index % 2 == 0? '#3f3f3f' : '#7d7d7d'}
-          }
-          onPress={this._clickHandler}
-          title={this.state.itemName}
-        />
-      </View>
-    )
+  render() {
+    const data = JSON.parse(this.props.progressionData);
+    const title = data.sequenceName;
+    const chords = data.chordSequenceIndices.reduce((accumulator, current) => {
+      const chord = data.chordProgression[current];
+      return accumulator + `, ${chord.root} ${chord.quality}`;
+    }, '').substring(2);
+    return (
+      <TouchableOpacity
+        style={styles.container}
+        onPress={ this._handleClick }
+      >
+        <View style={styles.titleContainer}>
+          <Text
+            style={styles.title}
+            numberOfLines={1}
+          >
+            { title }
+          </Text>
+        </View>
+        <View style={styles.chordsContainer}>
+          <Text
+            style={styles.chords}
+            numberOfLines={1}
+          >
+            { chords }
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
   }
 }
 
-// const styles = StyleSheet.create({
-//   ProgressionItem:{
-//     // width: '100%',
-//     backgroundColor: parseInt(this.state.index) % 2 == 0? '#3f3f3f' : '#7d7d7d'
-//     backgroundColor: '#3f3f3f'
-//   }
-// });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1
+  },
+  titleContainer: {
+  },
+  title: {
+    fontSize: 21
+  },
+  chordsContainer: {
+    marginTop: 4
+  },
+  chords: {
+    fontSize: 12
+  }
+});
 
 export default withNavigation(ProgressionListItem);
