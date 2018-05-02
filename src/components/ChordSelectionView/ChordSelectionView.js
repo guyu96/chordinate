@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   },
 
   outerContainer: {
-    flex: 4,
+    flex: 5,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',

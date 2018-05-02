@@ -34,62 +34,15 @@ export default class ProgressionBar extends Component {
 }
 
 class ChordTile extends Component {
-  constructor(props) {
-    super(props);
-
-    this._active = new Animated.Value(0);
-    this._style = {
-      ...Platform.select({
-
-        ios: {
-          transform: [{
-            scale: this._active.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 1.1]
-            })
-          }],
-          shadowRadius: this._active.interpolate({
-            inputRange: [0, 1],
-            outputRange: [2, 10]
-          })
-        },
-
-        android: {
-          transform: [{
-            scale: this._active.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 1.07]
-            })
-          }],
-          elevation: this._active.interpolate({
-            inputRange: [0, 1],
-            outputRange: [2, 6]
-          })
-        }
-
-      })
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.active !== nextProps.active) {
-      Animated.timing(this._active, {
-        duration: 300,
-        easing: Easing.bounce,
-        toValue: Number(nextProps.active)
-      }).start();
-    }
-  }
-
   render() {
     const { data, active, selectHandler } = this.props;
     const tileStyle = data.active ? styles.chordTileSelected : styles.chordTile;
     return (
       <Animated.View style={[
         tileStyle,
-        this._style
       ]}>
-        <Text style={styles.chordText}>{ `${data.root} ${data.quality}` }</Text>
+        <Text style={styles.chordRoot}>{ data.root }</Text>
+        <Text style={styles.chordQuality}>{ data.quality }</Text>
       </Animated.View>
     );
   }
@@ -99,18 +52,16 @@ const window = Dimensions.get('window');
 
 const chordTileStyle = {
   flexDirection: 'row',
-  justifyContent: 'center',
+  justifyContent: 'space-evenly',
   alignItems: 'center',
   padding: 10,
-  width: 80,
-  height: 80,
-  borderColor: '#666',
-  borderWidth: 1,
+  width: 100,
+  height: '100%',
+  backgroundColor: '#e6e6e6',
 };
 const chordTileSelectedStyle = {
   ...chordTileStyle,
-  borderColor: '#161616',
-  borderWidth: 2,
+  backgroundColor: '#b2b2b2'
 };
 
 const styles = StyleSheet.create({
@@ -119,15 +70,20 @@ const styles = StyleSheet.create({
   },
 
   list: {
-    height: 80,
+    height: '100%',
+    backgroundColor: '#e6e6e6',
     width: window.width
   },
 
   chordTile: chordTileStyle,
   chordTileSelected: chordTileSelectedStyle,
 
-  chordText: {
-    fontSize: 16,
-    color: '#222'
+  chordRoot: {
+    fontSize: 26,
+    color: '#262626'
+  },
+  chordQuality: {
+    fontSize: 15,
+    color: '#262626'
   }
 });
