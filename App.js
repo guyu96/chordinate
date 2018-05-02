@@ -1,18 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { StackNavigator} from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
 
 import ChordSelectionView from './src/components/ChordSelectionView/ChordSelectionView';
 import ChordPracticeView from './src/components/ChordPracticeView/ChordPracticeView';
 
 class HomeScreen extends React.Component {
-
   constructor(props) {
     super(props);
-
     this.state = {
       chordPracticeSequence: ["A maj", "C m", "F 7"]
-    }
+    };
   }
 
   render() {
@@ -21,31 +19,18 @@ class HomeScreen extends React.Component {
         <ChordSelectionView/>
       </View>
     );
-
   }
 }
 
-const RootStack = StackNavigator({
-    Home: {
-        screen: HomeScreen
-    },
-    Practice:{
-        screen: ChordPracticeView
-    },
-    },
-    {
-        initialRouteName: 'Home',
-    }
+const RootStack = StackNavigator(
+  {
+    Home : { screen: HomeScreen },
+    Practice : { screen: ChordPracticeView }
+  } , {
+    initialRouteName : 'Home',
+    headerMode: 'none'
+  }
 );
-
-export default class App extends React.Component{
-    render(){
-        return <RootStack/>
-    }
-}
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -53,11 +38,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-  },
+  }
 });
 
-// export default StackNavigator({
-//     Home: {
-//         screen: HomeScreen,
-//     },
-// });
+export default class App extends React.Component{
+  render(){
+    return <RootStack/>
+  }
+}
