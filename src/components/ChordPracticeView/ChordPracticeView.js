@@ -18,7 +18,7 @@ import BPMSlider from 'chordinate/src/components/BPMSlider/BPMSlider';
 const initShrinkBarWidth = 600;
 const defaultRepeat = 1;
 const numberReg = /^\+?\d+$/;
-const bpmIncreaseStep = 30;
+const bpmIncreaseStep = 20;
 const minBPM = 30;
 const maxBPM = 240;
 const defaultBPM = 100;
@@ -87,7 +87,17 @@ export default class ChordPracticeView extends Component {
   };
 
   startPracticeHandler = () => {
-    //console.log(this.state.bpm + " " + this.state.practiceSpeed);
+    if (this.state.repeated >= this.state.totalRepeats) {
+      this.setState((prevState) => {
+        return {
+          disablePracticeButton: false,
+          challengeBPM: prevState.bpm,
+          practiceSpeed: ChordPracticeView.bpmToSpeed(prevState.bpm),
+        }
+      });
+      return;
+    }
+    //console.log(this.state.challengeBPM + " " + this.state.practiceSpeed);
     this.setState({
       shrinkBarWidth: new Animated.Value(initShrinkBarWidth),
       disablePracticeButton: true
@@ -108,10 +118,10 @@ export default class ChordPracticeView extends Component {
         });
         this.startPracticeHandler();  // recur for next chord
       } else {  // end of practice sequence
-        let moreRepeats = this.state.repeated < this.state.totalRepeats - 1;
+        //let moreRepeats = this.state.repeated < this.state.totalRepeats - 1;
         this.setState((prevState) => {
-          let newRepeated =  moreRepeats? prevState.repeated + 1 : this.state.totalRepeats;
-          let newBPM = this.updateChallengeBPM(this.state.bpm);
+          let newRepeated = prevState.repeated + 1;
+          let newBPM = this.updateChallengeBPM(this.state.challengeBPM);
           return {
             currentChord: 0,
             repeated: newRepeated,
@@ -119,17 +129,7 @@ export default class ChordPracticeView extends Component {
             practiceSpeed: ChordPracticeView.bpmToSpeed(newBPM),
           }
         });
-        if (moreRepeats) {
-          this.startPracticeHandler();  // recur for next practice cycle
-        } else {  // end of all practice cycles
-          this.setState((prevState) => {
-            return {
-              disablePracticeButton: false,
-              challengeBPM: prevState.bpm,
-              practiceSpeed: ChordPracticeView.bpmToSpeed(prevState.bpm),
-            }
-          });
-        }
+        this.startPracticeHandler();  // recur for next practice cycle
       }
     });
   };
