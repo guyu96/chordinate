@@ -252,10 +252,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ddd',
         padding: 8,
-        margin: 5
+        margin: 5,
+        borderRadius: 5,
       },
         buttonText: {
-          fontSize: 14,
+          fontSize: 15,
           textAlign: 'center'
         },
 

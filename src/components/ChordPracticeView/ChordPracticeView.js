@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: "space-around",
     marginBottom: 15,
-    padding: 3,
+    padding: 5,
     backgroundColor: '#e6e6e6',
   },
 
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   },
 
 	challengeModeText: {
-    fontSize: scaleFontSize(12),
+    fontSize: 15,
     marginRight: 5,
   },
 
@@ -321,12 +321,12 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: scaleFontSize(12),
+    fontSize: 15,
   },
 
   repeatTextInput: {
     flex: 1,
-    fontSize: scaleFontSize(12),
+    fontSize: 15,
   },
 
   button: {
